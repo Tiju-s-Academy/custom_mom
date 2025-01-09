@@ -13,13 +13,18 @@
     'depends': ['base', 'mail', 'project_todo', 'hr'],  # Add hr dependency
     'data': [
         'security/synops_security.xml',      # Security groups first
-        'views/synops_mom_views.xml',        # Load views before access rights to create models
-        'views/synops_action_plan_views.xml',
         'security/ir.model.access.csv',      # Then load access rights
         'data/sequence_data.xml',            # Sequences third
         'data/activity_data.xml',            # Activity types fourth
+        'views/synops_mom_views.xml',        # Load views before access rights to create models
+        'views/synops_action_plan_views.xml',
         'views/menu_views.xml',              # Views last
     ],
+    'assets': {
+        'web.assets_backend': [
+            'synops/static/src/scss/synops.scss',
+        ],
+    },
     'installable': True,
     'application': True,
     'license': 'LGPL-3',
