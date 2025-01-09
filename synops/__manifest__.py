@@ -12,13 +12,13 @@
     """,
     'depends': ['base', 'mail', 'project_todo', 'hr'],  # Add hr dependency
     'data': [
-        'data/sequence_data.xml',            # Load sequences first
-        'views/synops_mom_views.xml',        # Then views to create models
+        'security/synops_security.xml',      # Security groups first
+        'security/ir.model.access.csv',      # Access rights second
+        'data/sequence_data.xml',            # Sequences third
+        'data/activity_data.xml',            # Activity types fourth
+        'views/synops_mom_views.xml',        # Views last
         'views/synops_action_plan_views.xml',
         'views/menu_views.xml',
-        'security/synops_security.xml',      # Then security groups
-        'security/ir.model.access.csv',      # Then access rights
-        'data/activity_data.xml',            # Finally activity data
     ],
     'installable': True,
     'application': True,

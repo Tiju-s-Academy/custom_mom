@@ -3,8 +3,8 @@ from odoo.exceptions import UserError
 
 class SynopsMOM(models.Model):
     _name = 'synops.mom'
-    _description = 'Meeting Minutes'
     _inherit = ['mail.thread', 'mail.activity.mixin']
+    _description = 'Meeting Minutes'
     _order = 'meeting_date desc, id desc'
 
     name = fields.Char('Reference', required=True, copy=False, readonly=True, default=lambda self: _('New'))
