@@ -1,5 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_mom_user,mom.user,base.model_synops_mom,synops.group_synops_user,1,1,1,0
-access_mom_manager,mom.manager,base.model_synops_mom,synops.group_synops_manager,1,1,1,1
-access_action_plan_user,action.plan.user,base.model_synops_action_plan,synops.group_synops_user,1,1,1,0
-access_action_plan_manager,action.plan.manager,base.model_synops_action_plan,synops.group_synops_manager,1,1,1,1
+access_mom_user,mom.user,model_synops_mom,synops.group_synops_user,1,1,1,0
+access_mom_manager,mom.manager,model_synops_mom,synops.group_synops_manager,1,1,1,1
+access_action_plan_user,action.plan.user,model_synops_action_plan,synops.group_synops_user,1,1,1,0
+access_action_plan_manager,action.plan.manager,model_synops_action_plan,synops.group_synops_manager,1,1,1,1
