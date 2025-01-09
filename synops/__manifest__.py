@@ -12,9 +12,9 @@
     """,
     'depends': ['base', 'mail', 'project_todo'],
     'data': [
-        'data/sequence_data.xml',
+        'security/synops_security.xml',  # Security groups must be loaded first
         'security/ir.model.access.csv',
-        'security/synops_security.xml',
+        'data/sequence_data.xml',
         'data/activity_data.xml',
         'views/synops_mom_views.xml',
         'views/synops_action_plan_views.xml',
