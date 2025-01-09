@@ -9,7 +9,7 @@ class SynopsActionPlan(models.Model):
     mom_id = fields.Many2one('synops.mom', string='MOM Reference', required=True)
     assignee_id = fields.Many2one('res.users', string='Assigned To', required=True)
     deadline = fields.Date('Deadline')
-    todo_id = fields.Many2one('todo.task', string='Related Todo')
+    todo_id = fields.Many2one('project.task', string='Related Todo')
     state = fields.Selection([
         ('new', 'New'),
         ('in_progress', 'In Progress'),
@@ -28,10 +28,11 @@ class SynopsActionPlan(models.Model):
     def _create_todo_task(self):
         self.ensure_one()
         if not self.todo_id:
-            todo = self.env['todo.task'].create({
+            todo = self.env['project.task'].create({
                 'name': f"[MOM] {self.name}",
-                'user_id': self.assignee_id.id,
+                'user_ids': [(4, self.assignee_id.id)],
                 'date_deadline': self.deadline,
                 'description': f"Action item from MOM: {self.mom_id.name}\n\n{self.notes or ''}",
+                'is_todo': True,
             })
             self.todo_id = todo.id

@@ -10,7 +10,7 @@
         * Follow-ups and Activities
         * Todo integration
     """,
-    'depends': ['base', 'mail', 'todo'],
+    'depends': ['base', 'mail', 'project_todo'],
     'data': [
         'security/synops_security.xml',
         'security/ir.model.access.csv',
