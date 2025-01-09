@@ -12,8 +12,9 @@
     """,
     'depends': ['base', 'mail', 'project_todo'],
     'data': [
-        'security/synops_security.xml',
+        'data/sequence_data.xml',
         'security/ir.model.access.csv',
+        'security/synops_security.xml',
         'data/activity_data.xml',
         'views/synops_mom_views.xml',
         'views/synops_action_plan_views.xml',
