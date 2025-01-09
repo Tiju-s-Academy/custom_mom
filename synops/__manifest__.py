@@ -10,11 +10,11 @@
         * Follow-ups and Activities
         * Todo integration
     """,
-    'depends': ['base', 'mail', 'project_todo'],
+    'depends': ['base', 'mail', 'project_todo', 'hr'],  # Add hr dependency
     'data': [
+        'data/sequence_data.xml',
         'security/synops_security.xml',  # Security groups must be loaded first
         'security/ir.model.access.csv',
-        'data/sequence_data.xml',
         'data/activity_data.xml',
         'views/synops_mom_views.xml',
         'views/synops_action_plan_views.xml',
