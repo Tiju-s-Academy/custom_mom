@@ -12,11 +12,11 @@
     """,
     'depends': ['base', 'mail', 'project_todo', 'hr'],  # Add hr dependency
     'data': [
-        'data/sequence_data.xml',
-        'security/ir.model.access.csv',  # Load access rights first
-        'security/synops_security.xml',  # Then load security rules
-        'data/activity_data.xml',
-        'views/synops_mom_views.xml',
+        'security/synops_security.xml',      # Load security groups first
+        'data/sequence_data.xml',            # Then sequences
+        'data/activity_data.xml',            # Then activity types
+        'security/ir.model.access.csv',      # Then access rights
+        'views/synops_mom_views.xml',        # Then views
         'views/synops_action_plan_views.xml',
         'views/menu_views.xml',
     ],
