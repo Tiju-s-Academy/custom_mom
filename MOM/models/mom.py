@@ -130,3 +130,16 @@ class MemorandumOfMeeting(models.Model):
         domain.extend(self.get_meetings_domain())
         return super().search_read(domain=domain, fields=fields, offset=offset, 
                                  limit=limit, order=order)
+
+    @api.onchange('attendee_ids', 'absentee_ids')
+    def _onchange_participants(self):
+        """Auto-select departments based on attendees and absentees"""
+        departments = self.env['hr.department']
+        # Get departments from attendees
+        if self.attendee_ids:
+            departments |= self.attendee_ids.mapped('department_id')
+        # Get departments from absentees
+        if self.absentee_ids:
+            departments |= self.absentee_ids.mapped('department_id')
+        
+        self.department_ids = departments
