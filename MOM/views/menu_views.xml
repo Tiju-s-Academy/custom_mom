@@ -13,14 +13,28 @@
         </field>
     </record>
 
-    <!-- Menu Items -->
+    <!-- Root Menu Items -->
     <menuitem id="menu_mom_root"
               name="Meeting Minutes"
+              web_icon="MOM,static/description/icon.png"
               sequence="10"/>
 
+    <!-- Main Menu Items -->
     <menuitem id="menu_mom_meeting"
               name="Meetings"
               parent="menu_mom_root"
               action="action_mom_meeting"
               sequence="10"/>
+
+    <menuitem id="menu_mom_action_plan"
+              name="Action Plans"
+              parent="menu_mom_root"
+              action="action_mom_action_plan"
+              sequence="20"/>
+
+    <!-- Configuration Menu -->
+    <menuitem id="menu_mom_config"
+              name="Configuration"
+              parent="menu_mom_root"
+              sequence="100"/>
 </odoo>
