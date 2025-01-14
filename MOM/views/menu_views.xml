@@ -29,21 +29,35 @@
     <!-- Menu Items -->
     <menuitem id="menu_mom_root"
               name="Meeting Minutes"
-              sequence="10"/>
+              web_icon="MOM,static/description/icon.png"
+              sequence="100"/>
 
-    <!-- User Menu -->
-    <menuitem id="menu_mom_meeting"
+    <!-- Meeting Minutes Menu -->
+    <menuitem id="menu_mom_meetings"
               name="Meetings"
               parent="menu_mom_root"
               action="action_mom_meeting"
-              groups="MOM.group_mom_user"
               sequence="10"/>
 
-    <!-- Manager Menu -->
-    <menuitem id="menu_mom_meeting_manager"
-              name="All Meetings"
+    <!-- Action Plans Menu -->
+    <menuitem id="menu_mom_action_plans"
+              name="Action Plans"
               parent="menu_mom_root"
-              action="action_mom_meeting_manager"
-              groups="MOM.group_mom_manager"
-              sequence="5"/>
+              action="action_mom_action_plan"
+              sequence="20"
+              groups="group_mom_user,group_mom_manager"/>
+
+    <!-- Configuration Menu -->
+    <menuitem id="menu_mom_config"
+              name="Configuration"
+              parent="menu_mom_root"
+              sequence="100"
+              groups="group_mom_manager"/>
+
+    <!-- Stages Configuration Menu -->
+    <menuitem id="menu_mom_stages"
+              name="Meeting Stages"
+              parent="menu_mom_config"
+              action="action_mom_stages"
+              sequence="10"/>
 </odoo>
