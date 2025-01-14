@@ -94,7 +94,7 @@
         <field name="name">mom.meeting.kanban</field>
         <field name="model">mom.meeting</field>
         <field name="arch" type="xml">
-            <kanban default_group_by="stage_id" class="o_kanban_small_column">
+            <kanban default_group_by="department_id" class="o_kanban_small_column">
                 <field name="name"/>
                 <field name="meeting_date"/>
                 <field name="state"/>
@@ -131,7 +131,10 @@
         <field name="name">Meetings</field>
         <field name="res_model">mom.meeting</field>
         <field name="view_mode">kanban,tree,form</field>
-        <field name="context">{}</field>  <!-- Empty context to avoid default filters -->
+        <field name="context">{
+            'search_default_my_meetings': 0,
+            'search_default_group_by_department': 1
+        }</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 No meetings found. Let's create one!
