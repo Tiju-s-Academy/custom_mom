@@ -87,16 +87,35 @@ class MemorandumOfMeeting(models.Model):
         return super().create(vals_list)
 
     def action_submit(self):
-        self.state = 'submitted'
-        self._create_approval_activity()
+        for record in self:
+            if not record.approved_by_id or not record.approved_by_id.user_id:
+                raise UserError(_("Cannot submit for approval: No approver set or approver has no user account."))
+            record.state = 'submitted'
+            record._create_approval_activity()
+        return True
 
     def _create_approval_activity(self):
+        activity_type = self.env.ref('MOM.mail_activity_mom_approval', raise_if_not_found=False)
+        if not activity_type:
+            raise UserError(_("Activity type 'MOM Approval' not found. Please check the configuration."))
+
         for record in self:
-            record.activity_schedule(
-                'mom.mail_activity_mom_approval',
-                user_id=record.approved_by_id.user_id.id,
-                note=f'Please review and approve MOM: {record.name}'
-            )
+            if not record.approved_by_id.user_id:
+                raise UserError(_("Approver must have a user account to receive activities."))
+
+            vals = {
+                'activity_type_id': activity_type.id,
+                'note': f'<p>Please review and approve Meeting Minutes: {record.name}</p>',
+                'user_id': record.approved_by_id.user_id.id,
+                'date_deadline': fields.Date.context_today(self),
+                'summary': _('MOM Approval Required'),
+                'res_model_id': self.env['ir.model']._get('mom.meeting').id,
+                'res_id': record.id,
+            }
+            try:
+                self.env['mail.activity'].create(vals)
+            except Exception as e:
+                raise UserError(_("Failed to create approval activity: %s") % str(e))
 
     @api.model
     def get_meetings_domain(self):

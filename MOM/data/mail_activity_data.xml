@@ -6,10 +6,11 @@
             <field name="name">MOM Approval</field>
             <field name="summary">Review and approve meeting minutes</field>
             <field name="category">default</field>
-            <field name="res_model">mom.meeting</field>
+            <field name="res_model_id" ref="model_mom_meeting"/>
             <field name="icon">fa-check-square-o</field>
             <field name="delay_count">1</field>
             <field name="delay_unit">days</field>
+            <field name="sequence">10</field>
         </record>
 
         <!-- Action Plan Follow-up Activity Type -->
