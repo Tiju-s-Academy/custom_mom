@@ -63,13 +63,18 @@
                             </group>
                         </page>
                         <page string="Action Plans">
-                            <field name="action_plan_ids">
-                                <tree editable="bottom">
-                                    <field name="name"/>
-                                    <field name="responsible_id"/>
-                                    <field name="deadline"/>
-                                    <field name="notes"/>
-                                    <field name="state"/>
+                            <field name="action_plan_ids" context="{'default_mom_id': active_id}">
+                                <tree editable="bottom" decoration-success="state == 'completed'" 
+                                      decoration-info="state == 'in_progress'" 
+                                      decoration-danger="state == 'pending'">
+                                    <control>
+                                        <create string="Add an Action Item"/>
+                                    </control>
+                                    <field name="name" string="Action Item"/>
+                                    <field name="responsible_id" string="Responsible Person"/>
+                                    <field name="deadline" string="Due Date"/>
+                                    <field name="notes" string="Notes"/>
+                                    <field name="state" widget="selection" string="Status"/>
                                 </tree>
                             </field>
                         </page>
