@@ -63,21 +63,15 @@
                             </group>
                         </page>
                         <page string="Action Plans">
-                            <field name="action_plan_ids" context="{'default_mom_id': active_id}">
+                            <field name="action_plan_ids">
                                 <tree editable="bottom">
-                                    <field name="name" required="1"/>
-                                    <field name="responsible_id" required="1"/>
+                                    <field name="name"/>
+                                    <field name="responsible_id"/>
                                     <field name="deadline"/>
                                     <field name="notes"/>
-                                    <field name="state" widget="badge" 
-                                           decoration-success="state == 'completed'"
-                                           decoration-info="state == 'in_progress'"
-                                           decoration-warning="state == 'pending'"
-                                           decoration-danger="state == 'cancelled'"/>
-                                    <button name="action_mark_completed" 
-                                            string="Complete" type="object" 
-                                            icon="fa-check" 
-                                            invisible="state == 'completed' or state == 'cancelled'"/>
+                                    <field name="state" decoration-success="state == 'completed'" 
+                                           decoration-info="state == 'in_progress'" 
+                                           decoration-danger="state == 'pending'"/>
                                 </tree>
                             </field>
                         </page>
