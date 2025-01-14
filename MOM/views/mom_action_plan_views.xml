@@ -24,7 +24,7 @@
                 <header>
                     <button name="action_mark_completed" string="Mark as Completed" 
                             type="object" class="oe_highlight" 
-                            attrs="{'invisible': [('state', '=', 'completed')]}"/>
+                            invisible="state == 'completed'"/>
                     <field name="state" widget="statusbar" 
                            statusbar_visible="pending,in_progress,completed"/>
                 </header>
