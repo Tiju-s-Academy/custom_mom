@@ -97,3 +97,17 @@ class MemorandumOfMeeting(models.Model):
                 user_id=record.approved_by_id.user_id.id,
                 note=f'Please review and approve MOM: {record.name}'
             )
+
+    @api.model
+    def get_meetings_domain(self):
+        if self.env.user.has_group('MOM.group_mom_manager'):
+            return []
+        return [('prepared_by_id.user_id', '=', self.env.user.id)]
+
+    @api.model
+    def search_read(self, domain=None, fields=None, offset=0, limit=None, order=None):
+        if domain is None:
+            domain = []
+        domain.extend(self.get_meetings_domain())
+        return super().search_read(domain=domain, fields=fields, offset=offset, 
+                                 limit=limit, order=order)
