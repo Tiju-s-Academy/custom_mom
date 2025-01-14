@@ -14,10 +14,10 @@
     'data': [
         'security/mom_security.xml',
         'security/ir.model.access.csv',
+        'data/mom_stages.xml',
         'views/mom_views.xml',
         'views/mom_action_plan_views.xml',
         'views/menu_views.xml',
-        'data/mom_stages.xml',
     ],
     'installable': True,
     'application': True,
