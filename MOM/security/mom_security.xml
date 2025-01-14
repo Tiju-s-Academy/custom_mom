@@ -1,19 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <record id="module_category_mom" model="ir.module.category">
-        <field name="name">Meeting Minutes</field>
-        <field name="sequence">20</field>
-    </record>
+    <data noupdate="0">
+        <!-- Module Category -->
+        <record id="module_mom_category" model="ir.module.category">
+            <field name="name">Meeting Minutes</field>
+            <field name="description">Manage meeting minutes and action plans</field>
+            <field name="sequence">20</field>
+        </record>
 
-    <record id="group_mom_user" model="res.groups">
-        <field name="name">User</field>
-        <field name="category_id" ref="module_category_mom"/>
-    </record>
+        <!-- User Group -->
+        <record id="group_mom_user" model="res.groups">
+            <field name="name">MOM User</field>
+            <field name="category_id" ref="module_mom_category"/>
+            <field name="comment">Users can create and manage their own meeting minutes</field>
+        </record>
 
-    <record id="group_mom_manager" model="res.groups">
-        <field name="name">Manager</field>
-        <field name="category_id" ref="module_category_mom"/>
-        <field name="implied_ids" eval="[(4, ref('group_mom_user'))]"/>
-        <field name="users" eval="[(4, ref('base.user_admin'))]"/>
-    </record>
+        <!-- Manager Group -->
+        <record id="group_mom_manager" model="res.groups">
+            <field name="name">MOM Manager</field>
+            <field name="category_id" ref="module_mom_category"/>
+            <field name="implied_ids" eval="[(4, ref('group_mom_user'))]"/>
+            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+            <field name="comment">Full access to all meeting minutes features</field>
+        </record>
+
+        <!-- Auto-assign admin to manager group -->
+        <function model="res.users" name="write">
+            <value eval="[ref('base.user_admin')]"/>
+            <value eval="{'groups_id': [(4, ref('group_mom_manager'))]}"/>
+        </function>
+    </data>
 </odoo>

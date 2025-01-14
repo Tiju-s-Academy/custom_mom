@@ -14,7 +14,9 @@
     'data': [
         'security/mom_security.xml',
         'security/ir.model.access.csv',
+        'data/ir.sequence.data.xml',  # Add sequence data
         'data/mom_stages.xml',
+        'data/mail_activity_data.xml',  # Add activity types
         'views/mom_views.xml',
         'views/mom_action_plan_views.xml',
         'views/menu_views.xml',
