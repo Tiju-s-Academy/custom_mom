@@ -65,11 +65,12 @@
                         <page string="Action Plans">
                             <field name="action_plan_ids">
                                 <tree editable="bottom">
-                                    <field name="name"/>
-                                    <field name="responsible_id"/>
-                                    <field name="deadline"/>
-                                    <field name="notes"/>
-                                    <field name="state" decoration-success="state == 'completed'" 
+                                    <field name="name" string="Action Item"/>
+                                    <field name="responsible_id" string="Responsible Person"/>
+                                    <field name="deadline" string="Due Date"/>
+                                    <field name="notes" string="Notes"/>
+                                    <field name="state" string="Status" 
+                                           decoration-success="state == 'completed'" 
                                            decoration-info="state == 'in_progress'" 
                                            decoration-danger="state == 'pending'"/>
                                 </tree>
