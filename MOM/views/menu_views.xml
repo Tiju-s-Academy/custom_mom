@@ -16,9 +16,8 @@
     <!-- Root Menu Items -->
     <menuitem id="menu_mom_root"
               name="Meeting Minutes"
-              web_icon="/c:/Users/muham/OneDrive/Documents/Tijus/git/custom_mom/MOM/static/description/icon.png"
-              sequence="10"
-              groups="MOM.group_mom_user"/>
+              web_icon="MOM,static/description/icon.png"
+              sequence="10"/>
 
     <!-- Main Menu Items -->
     <menuitem id="menu_mom_meeting"
