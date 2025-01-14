@@ -63,8 +63,11 @@
                             </group>
                         </page>
                         <page string="Action Plans">
-                            <field name="action_plan_ids">
+                            <field name="action_plan_ids" context="{'default_mom_id': active_id}">
                                 <tree editable="bottom">
+                                    <control>
+                                        <create string="Add Action Item"/>
+                                    </control>
                                     <field name="name" string="Action Item"/>
                                     <field name="responsible_id" string="Responsible Person"/>
                                     <field name="deadline" string="Due Date"/>
