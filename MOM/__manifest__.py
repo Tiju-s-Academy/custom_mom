@@ -1,0 +1,25 @@
+{
+    'name': 'Meeting Minutes (MOM)',
+    'version': '17.0.1.0.0',
+    'category': 'Project',
+    'summary': 'Manage Meeting Minutes and Action Plans',
+    'description': """
+        Memorandum of Meeting Management System
+        - Create and manage meeting minutes
+        - Track action plans
+        - Approval workflow
+        - Follow-up activities
+    """,
+    'depends': ['base', 'mail', 'hr'],
+    'data': [
+        'security/mom_security.xml',
+        'security/ir.model.access.csv',
+        'views/mom_views.xml',
+        'views/mom_action_plan_views.xml',
+        'views/menu_views.xml',
+        'data/mom_stages.xml',
+    ],
+    'installable': True,
+    'application': True,
+    'license': 'LGPL-3',
+}

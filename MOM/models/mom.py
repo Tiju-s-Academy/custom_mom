@@ -1,0 +1,72 @@
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError
+
+class MemorandumOfMeeting(models.Model):
+    _name = 'mom.meeting'
+    _description = 'Memorandum of Meeting'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
+    _order = 'meeting_date desc'
+
+    name = fields.Char('Reference', required=True, copy=False, readonly=True, 
+                      default=lambda self: _('New'))
+    meeting_date = fields.Date('Date of Meeting', required=True)
+    start_time = fields.Float('Starting Time', required=True)
+    end_time = fields.Float('Closing Time', required=True)
+    duration = fields.Float(compute='_compute_duration', store=True)
+    
+    attendee_ids = fields.Many2many('hr.employee', 'mom_attendee_rel', 
+                                  'mom_id', 'employee_id', string='Attendees')
+    absentee_ids = fields.Many2many('hr.employee', 'mom_absentee_rel', 
+                                   'mom_id', 'employee_id', string='Absentees')
+    department_ids = fields.Many2many('hr.department', string='Departments')
+    
+    venue = fields.Selection([
+        ('online', 'Online'),
+        ('offline', 'Offline')
+    ], required=True)
+    location = fields.Char('Venue Location')
+    
+    discussion_points = fields.Html('Discussion Points')
+    current_status = fields.Html('Current Status')
+    
+    action_plan_ids = fields.One2many('mom.action.plan', 'mom_id', 
+                                    string='Action Plans')
+    
+    next_meeting_date = fields.Date('Next Meeting Date')
+    prepared_by_id = fields.Many2one('hr.employee', string='Prepared By', 
+                                   required=True, default=lambda self: self.env.user.employee_id.id)
+    approved_by_id = fields.Many2one('hr.employee', string='Approved By', required=True)
+    
+    state = fields.Selection([
+        ('draft', 'Draft'),
+        ('submitted', 'Submitted'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected')
+    ], default='draft', tracking=True)
+    
+    stage_id = fields.Many2one('mom.stage', string='Stage', 
+                              default=lambda self: self.env['mom.stage'].search([], limit=1))
+
+    @api.depends('start_time', 'end_time')
+    def _compute_duration(self):
+        for record in self:
+            record.duration = record.end_time - record.start_time
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get('name', _('New')) == _('New'):
+                vals['name'] = self.env['ir.sequence'].next_by_code('mom.meeting') or _('New')
+        return super().create(vals_list)
+
+    def action_submit(self):
+        self.state = 'submitted'
+        self._create_approval_activity()
+
+    def _create_approval_activity(self):
+        for record in self:
+            record.activity_schedule(
+                'mom.mail_activity_mom_approval',
+                user_id=record.approved_by_id.user_id.id,
+                note=f'Please review and approve MOM: {record.name}'
+            )

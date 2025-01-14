@@ -1,5 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_synops_mom_user,synops.mom.user,base.model_ir_model,synops.group_synops_user,1,1,1,0
-access_synops_mom_manager,synops.mom.manager,base.model_ir_model,synops.group_synops_manager,1,1,1,1
-access_synops_action_plan_user,synops.action.plan.user,base.model_ir_model,synops.group_synops_user,1,1,1,0
-access_synops_action_plan_manager,synops.action.plan.manager,base.model_ir_model,synops.group_synops_manager,1,1,1,1

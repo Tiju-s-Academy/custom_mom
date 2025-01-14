@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="module_category_mom" model="ir.module.category">
+        <field name="name">Meeting Minutes</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="group_mom_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="category_id" ref="module_category_mom"/>
+    </record>
+
+    <record id="group_mom_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="category_id" ref="module_category_mom"/>
+        <field name="implied_ids" eval="[(4, ref('group_mom_user'))]"/>
+    </record>
+</odoo>
