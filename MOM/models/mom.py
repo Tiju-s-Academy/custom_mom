@@ -48,10 +48,22 @@ class MemorandumOfMeeting(models.Model):
     stage_id = fields.Many2one('mom.stage', string='Stage', 
                               default=lambda self: self.env['mom.stage'].search([], limit=1))
 
+    department_id = fields.Many2one(
+        'hr.department', 
+        string='Department',
+        compute='_compute_department',
+        store=True
+    )
+
     @api.depends('start_time', 'end_time')
     def _compute_duration(self):
         for record in self:
             record.duration = record.end_time - record.start_time
+
+    @api.depends('prepared_by_id.department_id')
+    def _compute_department(self):
+        for record in self:
+            record.department_id = record.prepared_by_id.department_id
 
     @api.depends('prepared_by_id')
     def _compute_approved_by(self):

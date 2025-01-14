@@ -94,7 +94,7 @@
         <field name="name">mom.meeting.kanban</field>
         <field name="model">mom.meeting</field>
         <field name="arch" type="xml">
-            <kanban default_group_by="prepared_by_id.department_id">
+            <kanban default_group_by="department_id">
                 <field name="name"/>
                 <field name="meeting_date"/>
                 <field name="state"/>
@@ -141,7 +141,7 @@
                         domain="[('state', '=', 'submitted')]"/>
                 <group expand="0" string="Group By">
                     <filter string="Department" name="group_by_department" 
-                            context="{'group_by': 'prepared_by_id.department_id'}"/>
+                            context="{'group_by': 'department_id'}"/>
                     <filter string="Stage" name="stage" context="{'group_by': 'stage_id'}"/>
                     <filter string="State" name="state" context="{'group_by': 'state'}"/>
                     <filter string="Meeting Date" name="meeting_date" context="{'group_by': 'meeting_date'}"/>
