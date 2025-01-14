@@ -19,6 +19,7 @@
         'data/mom_stages.xml',
         'views/mom_views.xml',
         'views/mom_action_plan_views.xml',
+        'views/mom_stage_views.xml',  # Add this line
         'views/menu_views.xml',
     ],
     'installable': True,
