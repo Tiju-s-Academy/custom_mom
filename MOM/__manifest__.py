@@ -22,4 +22,5 @@
     'installable': True,
     'application': True,
     'license': 'LGPL-3',
+    'web_icon': "MOM,static/description/icon.png",
 }
