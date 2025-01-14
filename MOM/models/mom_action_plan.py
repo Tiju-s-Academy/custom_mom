@@ -10,6 +10,7 @@ class MOMActionPlan(models.Model):
     responsible_id = fields.Many2one('hr.employee', string='Responsible Person', 
                                    required=True)
     deadline = fields.Date('Deadline')
+    notes = fields.Text('Notes')
     state = fields.Selection([
         ('pending', 'Pending'),
         ('in_progress', 'In Progress'),
@@ -17,7 +18,7 @@ class MOMActionPlan(models.Model):
         ('cancelled', 'Cancelled')
     ], default='pending', tracking=True)
     
-    notes = fields.Text('Notes')
+    
     
     def action_mark_completed(self):
         self.write({'state': 'completed'})
