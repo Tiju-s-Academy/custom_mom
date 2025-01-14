@@ -42,8 +42,8 @@
                             <field name="location" invisible="venue == 'online'"/>
                         </group>
                         <group>
-                            <field name="prepared_by_id"/>
-                            <field name="approved_by_id"/>
+                            <field name="prepared_by_id" force_save="1"/>
+                            <field name="approved_by_id" force_save="1"/>
                             <field name="next_meeting_date"/>
                             <field name="stage_id"/>
                         </group>

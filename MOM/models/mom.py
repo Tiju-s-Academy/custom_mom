@@ -34,8 +34,9 @@ class MemorandumOfMeeting(models.Model):
     
     next_meeting_date = fields.Date('Next Meeting Date')
     prepared_by_id = fields.Many2one('hr.employee', string='Prepared By', 
-                                   required=True, default=lambda self: self.env.user.employee_id.id)
-    approved_by_id = fields.Many2one('hr.employee', string='Approved By', required=True)
+                                   readonly=True, required=True, default=lambda self: self.env.user.employee_id.id)
+    approved_by_id = fields.Many2one('hr.employee', string='Approved By', 
+                                   compute='_compute_approved_by', store=True, readonly=True)
     
     state = fields.Selection([
         ('draft', 'Draft'),
@@ -51,6 +52,20 @@ class MemorandumOfMeeting(models.Model):
     def _compute_duration(self):
         for record in self:
             record.duration = record.end_time - record.start_time
+
+    @api.depends('prepared_by_id')
+    def _compute_approved_by(self):
+        for record in self:
+            if record.prepared_by_id and record.prepared_by_id.parent_id:
+                record.approved_by_id = record.prepared_by_id.parent_id
+            else:
+                record.approved_by_id = False
+
+    @api.constrains('prepared_by_id')
+    def _check_prepared_by(self):
+        for record in self:
+            if not record.prepared_by_id.user_id == self.env.user:
+                raise UserError(_("You can only create meetings for yourself."))
 
     @api.model_create_multi
     def create(self, vals_list):

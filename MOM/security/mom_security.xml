@@ -29,5 +29,24 @@
             <value eval="[ref('base.user_admin')]"/>
             <value eval="{'groups_id': [(4, ref('group_mom_manager'))]}"/>
         </function>
+
+        <!-- Record Rules -->
+        <record id="mom_meeting_user_rule" model="ir.rule">
+            <field name="name">Users can only see their own meetings</field>
+            <field name="model_id" ref="model_mom_meeting"/>
+            <field name="domain_force">[('prepared_by_id.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_mom_user'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="mom_meeting_manager_rule" model="ir.rule">
+            <field name="name">Managers can see all meetings</field>
+            <field name="model_id" ref="model_mom_meeting"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_mom_manager'))]"/>
+        </record>
     </data>
 </odoo>
