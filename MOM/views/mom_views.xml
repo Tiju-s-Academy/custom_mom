@@ -115,11 +115,8 @@
                                 </div>
                                 <div class="o_kanban_record_body">
                                     <field name="meeting_date"/>
-                                    <div class="mt-2 mom_departments">
-                                        <field name="department_ids" widget="many2many_tags"/>
-                                    </div>
-                                    <div class="mt-2 mom_attendees">
-                                        <field name="attendee_ids" widget="many2many_tags"/>
+                                    <div class="mt-2">
+                                        <field name="department_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                                     </div>
                                 </div>
                                 <div class="o_kanban_record_bottom">
