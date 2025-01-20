@@ -23,7 +23,7 @@
             <form>
                 <header>
                     <button name="action_submit" string="Submit for Approval" type="object" 
-                            class="oe_highlight" invisible="state != 'draft'"/>
+                            class="oe_highlight" invisible="state != 'draft' or not is_meeting_creator"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
@@ -34,13 +34,14 @@
                     </div>
                     <group>
                         <group>
-                            <field name="meeting_date"/>
-                            <field name="start_time" widget="float_time"/>
-                            <field name="end_time" widget="float_time"/>
-                            <field name="duration" widget="float_time"/>
-                            <field name="venue"/>
-                            <field name="location" invisible="venue == 'online'"/>
-                            <field name="meeting_type_id" options="{'no_create': True}"/>
+                            <field name="meeting_date" attrs="{'readonly': [('is_meeting_creator', '=', False)]}"/>
+                            <field name="start_time" widget="float_time" attrs="{'readonly': [('is_meeting_creator', '=', False)]}"/>
+                            <field name="end_time" widget="float_time" attrs="{'readonly': [('is_meeting_creator', '=', False)]}"/>
+                            <field name="duration" widget="float_time" attrs="{'readonly': [('is_meeting_creator', '=', False)]}"/>
+                            <field name="venue" attrs="{'readonly': [('is_meeting_creator', '=', False)]}"/>
+                            <field name="location" invisible="venue == 'online'" attrs="{'readonly': [('is_meeting_creator', '=', False)]}"/>
+                            <field name="meeting_type_id" options="{'no_create': True}" attrs="{'readonly': [('is_meeting_creator', '=', False)]}"/>
+                            <field name="is_meeting_creator" invisible="1"/>
                         </group>
                         <group>
                             <field name="prepared_by_id" force_save="1"/>
@@ -52,9 +53,9 @@
                     <notebook>
                         <page string="Attendees &amp; Departments">
                             <group>
-                                <field name="attendee_ids" widget="many2many_tags"/>
-                                <field name="absentee_ids" widget="many2many_tags"/>
-                                <field name="department_ids" widget="many2many_tags"/>
+                                <field name="attendee_ids" widget="many2many_tags" attrs="{'readonly': [('is_meeting_creator', '=', False)]}"/>
+                                <field name="absentee_ids" widget="many2many_tags" attrs="{'readonly': [('is_meeting_creator', '=', False)]}"/>
+                                <field name="department_ids" widget="many2many_tags" attrs="{'readonly': [('is_meeting_creator', '=', False)]}"/>
                             </group>
                         </page>
                         <page string="Discussion">

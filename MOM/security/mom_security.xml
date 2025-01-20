@@ -39,9 +39,13 @@
 
         <!-- Record Rules -->
         <record id="mom_meeting_user_rule" model="ir.rule">
-            <field name="name">Users can only see their own meetings</field>
+            <field name="name">Users can see their own meetings and meetings they attend</field>
             <field name="model_id" ref="model_mom_meeting"/>
-            <field name="domain_force">[('prepared_by_id.user_id', '=', user.id)]</field>
+            <field name="domain_force">['|', '|', '|',
+                ('prepared_by_id.user_id', '=', user.id),
+                ('attendee_ids.user_id', '=', user.id),
+                ('absentee_ids.user_id', '=', user.id),
+                ('responsible_id.user_id', '=', user.id)]</field>
             <field name="groups" eval="[(4, ref('group_mom_user'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>

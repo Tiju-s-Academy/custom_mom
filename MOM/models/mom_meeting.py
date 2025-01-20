@@ -9,25 +9,14 @@ class MomMeeting(models.Model):
     _name = 'mom.meeting'
     # ...existing code...
 
-    @api.model_create_multi
-    def create(self, vals_list):
-        meetings = super().create(vals_list)
-        for meeting in meetings:
-            # Add attendees to the attendee group
-            attendee_group = self.env.ref('MOM.group_mom_attendee')
-            for attendee in meeting.attendee_ids:
-                if attendee.user_id:
-                    attendee.user_id.write({'groups_id': [(4, attendee_group.id)]})
-        return meetings
+    is_meeting_creator = fields.Boolean(compute='_compute_is_meeting_creator', store=False)
 
-    def write(self, vals):
-        result = super().write(vals)
-        if 'attendee_ids' in vals:
-            attendee_group = self.env.ref('MOM.group_mom_attendee')
-            for meeting in self:
-                for attendee in meeting.attendee_ids:
-                    if attendee.user_id:
-                        attendee.user_id.write({'groups_id': [(4, attendee_group.id)]})
-        return result
+    @api.depends('prepared_by_id')
+    def _compute_is_meeting_creator(self):
+        for record in self:
+            record.is_meeting_creator = (
+                record.prepared_by_id.user_id.id == self.env.user.id or
+                self.env.user.has_group('MOM.group_mom_manager')
+            )
 
 # ...existing code...
