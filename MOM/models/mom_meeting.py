@@ -53,14 +53,4 @@ class MomMeeting(models.Model):
                 self.env.user.has_group('MOM.group_mom_manager')
             )
 
-    @api.depends('prepared_by_id', 'state')
-    def _compute_readonly_state(self):
-        for record in self:
-            record.readonly_state = (
-                record.prepared_by_id.user_id != self.env.user and
-                not self.env.user.has_group('MOM.group_mom_manager')
-            )
-
-    readonly_state = fields.Boolean(compute='_compute_readonly_state', store=False)
-
     # ...existing code...
