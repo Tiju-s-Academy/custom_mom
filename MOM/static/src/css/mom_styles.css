@@ -12,3 +12,21 @@
     background-color: #ffc7ce !important;
     color: #9c0006 !important;
 }
+
+/* Department Tags Style */
+.o_kanban_record .mom_department_tag {
+    background-color: #e1f0ff !important;
+    color: #0057b8 !important;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin: 2px;
+}
+
+/* Attendee Tags Style */
+.o_kanban_record .mom_attendee_tag {
+    background-color: #e8f5e9 !important;
+    color: #2e7d32 !important;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin: 2px;
+}
