@@ -38,7 +38,8 @@ class MomMeeting(models.Model):
         ('cancelled', 'Cancelled')
     ], string='Status', default='draft', tracking=True)
 
-    def can_edit_record(self):
+    def _check_can_edit(self):
+        """Check if current user can edit the record"""
         self.ensure_one()
         return (
             self.prepared_by_id.user_id == self.env.user or 
