@@ -26,6 +26,25 @@
         <field name="arch" type="xml">
             <tree class="mom_action_plan_tree" decoration-danger="state == 'pending'" decoration-success="state == 'completed'" decoration-info="state == 'in_progress'">
                 <field name="name"/>
+                <field name="mom_id"/>
+                <field name="responsible_id"/>
+                <field name="deadline"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_mom_action_plan_form" model="ir.ui.view">
+        <field name="name">mom.action.plan.form</field>
+        <field name="model">mom.action.plan</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_mark_completed" string="Mark as Completed" 
+                            type="object" class="oe_highlight" 
+                            invisible="state == 'completed'"/>
+                    <field name="state" widget="statusbar" 
                            statusbar_visible="pending,in_progress,completed"/>
                 </header>
                 <sheet>
