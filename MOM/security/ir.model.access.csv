@@ -9,3 +9,5 @@ access_mom_meeting_type_user,mom.meeting.type.user,model_mom_meeting_type,group_
 access_mom_meeting_type_manager,mom.meeting.type.manager,model_mom_meeting_type,group_mom_manager,1,1,1,1
 access_mom_meeting_attendee,mom.meeting.attendee,model_mom_meeting,group_mom_attendee,1,0,0,0
 access_mom_action_plan_attendee,mom.action.plan.attendee,model_mom_action_plan,group_mom_attendee,1,0,0,0
+access_mom_stage_attendee,mom.stage.attendee,model_mom_stage,group_mom_attendee,1,0,0,0
+access_mom_meeting_type_attendee,mom.meeting.type.attendee,model_mom_meeting_type,group_mom_attendee,1,0,0,0
