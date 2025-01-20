@@ -55,6 +55,13 @@ class MemorandumOfMeeting(models.Model):
         store=True
     )
 
+    meeting_type_id = fields.Many2one(
+        'mom.meeting.type',
+        string='Meeting Type',
+        required=True,
+        tracking=True
+    )
+
     @api.depends('start_time', 'end_time')
     def _compute_duration(self):
         for record in self:

@@ -66,6 +66,13 @@
               sequence="100"
               groups="group_mom_manager"/>
 
+    <!-- Meeting Types Configuration Menu -->
+    <menuitem id="menu_mom_meeting_types"
+              name="Meeting Types"
+              parent="menu_mom_config"
+              action="action_mom_meeting_type"
+              sequence="5"/>
+
     <!-- Stages Configuration Menu -->
     <menuitem id="menu_mom_stages"
               name="Meeting Stages"

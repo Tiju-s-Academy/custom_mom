@@ -20,6 +20,7 @@
         'views/mom_views.xml',
         'views/mom_action_plan_views.xml',
         'views/mom_stage_views.xml',  # Add this line
+        'views/mom_meeting_type_views.xml',  # Add this line
         'views/menu_views.xml',
     ],
     'installable': True,

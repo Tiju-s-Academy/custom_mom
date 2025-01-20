@@ -40,6 +40,7 @@
                             <field name="duration" widget="float_time"/>
                             <field name="venue"/>
                             <field name="location" invisible="venue == 'online'"/>
+                            <field name="meeting_type_id" options="{'no_create': True}"/>
                         </group>
                         <group>
                             <field name="prepared_by_id" force_save="1"/>
@@ -94,11 +95,13 @@
         <field name="name">mom.meeting.kanban</field>
         <field name="model">mom.meeting</field>
         <field name="arch" type="xml">
-            <kanban default_group_by="department_id" class="o_kanban_small_column">
+            <kanban default_group_by="meeting_type_id" class="o_kanban_small_column">
                 <field name="name"/>
                 <field name="meeting_date"/>
                 <field name="state"/>
                 <field name="stage_id"/>
+                <field name="department_id"/>
+                <field name="meeting_type_id"/>
                 <templates>
                     <t t-name="kanban-box">
                         <div class="oe_kanban_global_click">
@@ -112,6 +115,9 @@
                                 </div>
                                 <div class="o_kanban_record_body">
                                     <field name="meeting_date"/>
+                                    <div class="mt-2">
+                                        <field name="department_id" widget="badge"/>
+                                    </div>
                                 </div>
                                 <div class="o_kanban_record_bottom">
                                     <div class="oe_kanban_bottom_left">
@@ -151,6 +157,7 @@
                 <field name="name"/>
                 <field name="prepared_by_id"/>
                 <field name="approved_by_id"/>
+                <field name="meeting_type_id"/>
                 <filter string="My Meetings" name="my_meetings" 
                         domain="[('prepared_by_id.user_id', '=', uid)]"/>
                 <filter string="To Approve" name="to_approve" 
@@ -161,6 +168,8 @@
                     <filter string="Stage" name="stage" context="{'group_by': 'stage_id'}"/>
                     <filter string="State" name="state" context="{'group_by': 'state'}"/>
                     <filter string="Meeting Date" name="meeting_date" context="{'group_by': 'meeting_date'}"/>
+                    <filter string="Meeting Type" name="group_by_type" 
+                            context="{'group_by': 'meeting_type_id'}"/>
                 </group>
             </search>
         </field>
