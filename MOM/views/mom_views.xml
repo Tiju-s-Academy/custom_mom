@@ -23,7 +23,7 @@
             <form>
                 <header>
                     <button name="action_submit" string="Submit for Approval" type="object" 
-                            class="oe_highlight" invisible="state != 'draft' or prepared_by_id.user_id != uid"/>
+                            class="oe_highlight" invisible="state != 'draft' or not can_edit"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
@@ -34,33 +34,34 @@
                     </div>
                     <group>
                         <group>
-                            <field name="meeting_date" readonly="prepared_by_id.user_id != uid"/>
-                            <field name="start_time" widget="float_time" readonly="prepared_by_id.user_id != uid"/>
-                            <field name="end_time" widget="float_time" readonly="prepared_by_id.user_id != uid"/>
-                            <field name="duration" widget="float_time" readonly="prepared_by_id.user_id != uid"/>
-                            <field name="venue" readonly="prepared_by_id.user_id != uid"/>
-                            <field name="location" invisible="venue == 'online'" readonly="prepared_by_id.user_id != uid"/>
-                            <field name="meeting_type_id" options="{'no_create': True}" readonly="prepared_by_id.user_id != uid"/>
+                            <field name="can_edit" invisible="1"/>
+                            <field name="meeting_date" readonly="not can_edit"/>
+                            <field name="start_time" widget="float_time" readonly="not can_edit"/>
+                            <field name="end_time" widget="float_time" readonly="not can_edit"/>
+                            <field name="duration" widget="float_time" readonly="not can_edit"/>
+                            <field name="venue" readonly="not can_edit"/>
+                            <field name="location" invisible="venue == 'online'" readonly="not can_edit"/>
+                            <field name="meeting_type_id" options="{'no_create': True}" readonly="not can_edit"/>
                         </group>
                         <group>
-                            <field name="prepared_by_id" force_save="1"/>
-                            <field name="approved_by_id" force_save="1"/>
-                            <field name="next_meeting_date"/>
-                            <field name="stage_id"/>
+                            <field name="prepared_by_id" force_save="1" readonly="not can_edit"/>
+                            <field name="approved_by_id" force_save="1" readonly="not can_edit"/>
+                            <field name="next_meeting_date" readonly="not can_edit"/>
+                            <field name="stage_id" readonly="not can_edit"/>
                         </group>
                     </group>
                     <notebook>
                         <page string="Attendees &amp; Departments">
                             <group>
-                                <field name="attendee_ids" widget="many2many_tags" readonly="prepared_by_id.user_id != uid"/>
-                                <field name="absentee_ids" widget="many2many_tags" readonly="prepared_by_id.user_id != uid"/>
-                                <field name="department_ids" widget="many2many_tags" readonly="prepared_by_id.user_id != uid"/>
+                                <field name="attendee_ids" widget="many2many_tags" readonly="not can_edit"/>
+                                <field name="absentee_ids" widget="many2many_tags" readonly="not can_edit"/>
+                                <field name="department_ids" widget="many2many_tags" readonly="not can_edit"/>
                             </group>
                         </page>
                         <page string="Discussion">
                             <group>
-                                <field name="discussion_points"/>
-                                <field name="current_status"/>
+                                <field name="discussion_points" readonly="not can_edit"/>
+                                <field name="current_status" readonly="not can_edit"/>
                             </group>
                         </page>
                         <page string="Action Plans">
