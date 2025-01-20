@@ -11,17 +11,17 @@ class MomMeeting(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
     name = fields.Char('Name', readonly=True)
-    meeting_date = fields.Date('Meeting Date', required=True)
-    start_time = fields.Float('Start Time')
-    end_time = fields.Float('End Time')
-    duration = fields.Float('Duration', compute='_compute_duration')
+    meeting_date = fields.Date('Meeting Date', required=True, tracking=True)
+    start_time = fields.Float('Start Time', tracking=True)
+    end_time = fields.Float('End Time', tracking=True)
+    duration = fields.Float('Duration', compute='_compute_duration', store=True)
     venue = fields.Selection([
         ('online', 'Online'),
         ('office', 'Office'),
         ('other', 'Other')
-    ], string='Venue', default='office')
-    location = fields.Char('Location')
-    meeting_type_id = fields.Many2one('mom.meeting.type', string='Meeting Type')
+    ], string='Venue', default='office', tracking=True)
+    location = fields.Char('Location', tracking=True)
+    meeting_type_id = fields.Many2one('mom.meeting.type', string='Meeting Type', tracking=True)
     prepared_by_id = fields.Many2one('hr.employee', string='Prepared By', required=True)
     approved_by_id = fields.Many2one('hr.employee', string='Approved By')
     next_meeting_date = fields.Date('Next Meeting Date')
@@ -38,19 +38,17 @@ class MomMeeting(models.Model):
         ('cancelled', 'Cancelled')
     ], string='Status', default='draft', tracking=True)
 
-    can_edit = fields.Boolean(
-        string='Can Edit',
-        compute='_compute_can_edit',
-        store=False,
-        help='Technical field to control edit rights'
-    )
+    def can_edit_record(self):
+        self.ensure_one()
+        return (
+            self.prepared_by_id.user_id == self.env.user or 
+            self.env.user.has_group('MOM.group_mom_manager')
+        )
 
-    @api.depends('prepared_by_id.user_id')
-    def _compute_can_edit(self):
+    @api.depends('start_time', 'end_time')
+    def _compute_duration(self):
         for record in self:
-            record.can_edit = (
-                record.prepared_by_id.user_id == self.env.user or 
-                self.env.user.has_group('MOM.group_mom_manager')
-            )
-
-    # ...existing code...
+            if record.start_time and record.end_time:
+                record.duration = record.end_time - record.start_time
+            else:
+                record.duration = 0.0
