@@ -7,16 +7,27 @@ class Department(models.Model):
 
 class MomMeeting(models.Model):
     _name = 'mom.meeting'
+    _description = 'Meeting Minutes'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     # ...existing code...
 
-    is_meeting_creator = fields.Boolean(compute='_compute_is_meeting_creator', store=False)
-
-    @api.depends('prepared_by_id')
-    def _compute_is_meeting_creator(self):
+    def _get_is_meeting_creator(self):
         for record in self:
             record.is_meeting_creator = (
-                record.prepared_by_id.user_id.id == self.env.user.id or
+                record.prepared_by_id.user_id == self.env.user or 
                 self.env.user.has_group('MOM.group_mom_manager')
             )
+
+    is_meeting_creator = fields.Boolean(
+        string='Is Meeting Creator',
+        compute='_get_is_meeting_creator',
+    )
+
+    def can_edit(self):
+        self.ensure_one()
+        return (
+            self.prepared_by_id.user_id == self.env.user or 
+            self.env.user.has_group('MOM.group_mom_manager')
+        )
 
 # ...existing code...
