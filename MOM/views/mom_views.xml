@@ -23,7 +23,7 @@
             <form>
                 <header>
                     <button name="action_submit" string="Submit for Approval" type="object" 
-                            class="oe_highlight" attrs="{'invisible': ['|', ('state', '!=', 'draft'), ('prepared_by_id.user_id', '!=', uid)]}"/>
+                            class="oe_highlight" invisible="state != 'draft' or prepared_by_id.user_id != uid"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
@@ -34,13 +34,13 @@
                     </div>
                     <group>
                         <group>
-                            <field name="meeting_date" attrs="{'readonly': [('prepared_by_id.user_id', '!=', uid)]}"/>
-                            <field name="start_time" widget="float_time" attrs="{'readonly': [('prepared_by_id.user_id', '!=', uid)]}"/>
-                            <field name="end_time" widget="float_time" attrs="{'readonly': [('prepared_by_id.user_id', '!=', uid)]}"/>
-                            <field name="duration" widget="float_time" attrs="{'readonly': [('prepared_by_id.user_id', '!=', uid)]}"/>
-                            <field name="venue" attrs="{'readonly': [('prepared_by_id.user_id', '!=', uid)]}"/>
-                            <field name="location" invisible="venue == 'online'" attrs="{'readonly': [('prepared_by_id.user_id', '!=', uid)]}"/>
-                            <field name="meeting_type_id" options="{'no_create': True}" attrs="{'readonly': [('prepared_by_id.user_id', '!=', uid)]}"/>
+                            <field name="meeting_date" readonly="prepared_by_id.user_id != uid"/>
+                            <field name="start_time" widget="float_time" readonly="prepared_by_id.user_id != uid"/>
+                            <field name="end_time" widget="float_time" readonly="prepared_by_id.user_id != uid"/>
+                            <field name="duration" widget="float_time" readonly="prepared_by_id.user_id != uid"/>
+                            <field name="venue" readonly="prepared_by_id.user_id != uid"/>
+                            <field name="location" invisible="venue == 'online'" readonly="prepared_by_id.user_id != uid"/>
+                            <field name="meeting_type_id" options="{'no_create': True}" readonly="prepared_by_id.user_id != uid"/>
                         </group>
                         <group>
                             <field name="prepared_by_id" force_save="1"/>
@@ -52,9 +52,9 @@
                     <notebook>
                         <page string="Attendees &amp; Departments">
                             <group>
-                                <field name="attendee_ids" widget="many2many_tags" attrs="{'readonly': [('prepared_by_id.user_id', '!=', uid)]}"/>
-                                <field name="absentee_ids" widget="many2many_tags" attrs="{'readonly': [('prepared_by_id.user_id', '!=', uid)]}"/>
-                                <field name="department_ids" widget="many2many_tags" attrs="{'readonly': [('prepared_by_id.user_id', '!=', uid)]}"/>
+                                <field name="attendee_ids" widget="many2many_tags" readonly="prepared_by_id.user_id != uid"/>
+                                <field name="absentee_ids" widget="many2many_tags" readonly="prepared_by_id.user_id != uid"/>
+                                <field name="department_ids" widget="many2many_tags" readonly="prepared_by_id.user_id != uid"/>
                             </group>
                         </page>
                         <page string="Discussion">
