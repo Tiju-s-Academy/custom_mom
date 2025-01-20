@@ -19,6 +19,14 @@ class MOMActionPlan(models.Model):
         ('cancelled', 'Cancelled')
     ], default='pending', tracking=True)
     
+    department_id = fields.Many2one(
+        'hr.department',
+        string='Department',
+        related='responsible_id.department_id',
+        store=True,
+        readonly=True
+    )
+    
     @api.constrains('mom_id', 'responsible_id')
     def _check_access_rights(self):
         for record in self:

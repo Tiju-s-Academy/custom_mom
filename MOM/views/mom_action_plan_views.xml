@@ -9,6 +9,7 @@
                 <field name="name"/>
                 <field name="mom_id"/>
                 <field name="responsible_id"/>
+                <field name="department_id"/>
                 <field name="deadline"/>
                 <field name="state"/>
             </tree>
@@ -38,6 +39,7 @@
                         <group>
                             <field name="mom_id"/>
                             <field name="responsible_id"/>
+                            <field name="department_id"/>
                         </group>
                         <group>
                             <field name="deadline"/>
@@ -63,6 +65,7 @@
                 <field name="name"/>
                 <field name="mom_id"/>
                 <field name="responsible_id"/>
+                <field name="department_id"/>
                 <filter string="My Action Items" name="my_actions" 
                         domain="[('responsible_id.user_id', '=', uid)]"/>
                 <filter string="Pending" name="pending" 
@@ -78,6 +81,8 @@
                             context="{'group_by': 'responsible_id'}"/>
                     <filter string="Status" name="group_by_state" 
                             context="{'group_by': 'state'}"/>
+                    <filter string="Department" name="group_by_department" 
+                            context="{'group_by': 'department_id'}"/>
                 </group>
             </search>
         </field>
