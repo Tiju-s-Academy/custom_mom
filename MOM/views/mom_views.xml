@@ -41,7 +41,6 @@
                             <field name="venue" attrs="{'readonly': [('prepared_by_id.user_id', '!=', uid)]}"/>
                             <field name="location" invisible="venue == 'online'" attrs="{'readonly': [('prepared_by_id.user_id', '!=', uid)]}"/>
                             <field name="meeting_type_id" options="{'no_create': True}" attrs="{'readonly': [('prepared_by_id.user_id', '!=', uid)]}"/>
-                            <field name="is_meeting_creator" invisible="1"/>
                         </group>
                         <group>
                             <field name="prepared_by_id" force_save="1"/>
