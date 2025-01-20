@@ -1,0 +1,14 @@
+.o_list_view .text-success {
+    background-color: #c6efce !important;
+    color: #006100 !important;
+}
+
+.o_list_view .text-info {
+    background-color: #bdd7ee !important;
+    color: #1f497d !important;
+}
+
+.o_list_view .text-danger {
+    background-color: #ffc7ce !important;
+    color: #9c0006 !important;
+}

@@ -14,6 +14,7 @@
     'data': [
         'security/mom_security.xml',
         'security/ir.model.access.csv',
+        'views/assets.xml',  # Add this line before other views
         'data/ir.sequence.data.xml',  # Add sequence data
         'data/mail_activity_data.xml',  # Add activity types
         'data/mom_stages.xml',
@@ -27,4 +28,9 @@
     'application': True,
     'license': 'LGPL-3',
     'web_icon': "MOM,static/description/icon.png",
+    'assets': {
+        'web.assets_backend': [
+            'MOM/static/src/css/mom_styles.css',
+        ],
+    },
 }
