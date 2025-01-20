@@ -100,7 +100,7 @@
                 <field name="meeting_date"/>
                 <field name="state"/>
                 <field name="stage_id"/>
-                <field name="department_id"/>
+                <field name="department_ids"/>
                 <field name="meeting_type_id"/>
                 <templates>
                     <t t-name="kanban-box">
@@ -116,7 +116,7 @@
                                 <div class="o_kanban_record_body">
                                     <field name="meeting_date"/>
                                     <div class="mt-2">
-                                        <field name="department_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                        <field name="department_ids" widget="many2many_tags"/>
                                     </div>
                                 </div>
                                 <div class="o_kanban_record_bottom">
