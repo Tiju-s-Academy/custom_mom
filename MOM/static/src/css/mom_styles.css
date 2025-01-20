@@ -14,7 +14,7 @@
 }
 
 /* Department Tags Style */
-.o_kanban_record .mom_department_tag {
+.o_kanban_record .mom_departments .o_field_many2many_tags .badge {
     background-color: #e1f0ff !important;
     color: #0057b8 !important;
     padding: 2px 6px;
@@ -23,7 +23,7 @@
 }
 
 /* Attendee Tags Style */
-.o_kanban_record .mom_attendee_tag {
+.o_kanban_record .mom_attendees .o_field_many2many_tags .badge {
     background-color: #e8f5e9 !important;
     color: #2e7d32 !important;
     padding: 2px 6px;
