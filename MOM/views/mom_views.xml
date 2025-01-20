@@ -23,7 +23,7 @@
             <form>
                 <header>
                     <button name="action_submit" string="Submit for Approval" type="object" 
-                            class="oe_highlight" invisible="state != 'draft' or not can_edit"/>
+                            class="oe_highlight" invisible="state != 'draft' or readonly_state"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
@@ -34,16 +34,17 @@
                     </div>
                     <group>
                         <group>
-                            <field name="can_edit" invisible="1"/>
-                            <field name="meeting_date" readonly="not can_edit"/>
-                            <field name="start_time" widget="float_time" readonly="not can_edit"/>
-                            <field name="end_time" widget="float_time" readonly="not can_edit"/>
-                            <field name="duration" widget="float_time" readonly="not can_edit"/>
-                            <field name="venue" readonly="not can_edit"/>
-                            <field name="location" invisible="venue == 'online'" readonly="not can_edit"/>
-                            <field name="meeting_type_id" options="{'no_create': True}" readonly="not can_edit"/>
+                            <field name="readonly_state" invisible="1"/>
+                            <field name="meeting_date" readonly="readonly_state"/>
+                            <field name="start_time" widget="float_time" readonly="readonly_state"/>
+                            <field name="end_time" widget="float_time" readonly="readonly_state"/>
+                            <field name="duration" widget="float_time" readonly="1"/>
+                            <field name="venue" readonly="readonly_state"/>
+                            <field name="location" invisible="venue == 'online'" readonly="readonly_state"/>
+                            <field name="meeting_type_id" options="{'no_create': True}" readonly="readonly_state"/>
                         </group>
                         <group>
+                            <field name="can_edit" invisible="1"/>
                             <field name="prepared_by_id" force_save="1" readonly="not can_edit"/>
                             <field name="approved_by_id" force_save="1" readonly="not can_edit"/>
                             <field name="next_meeting_date" readonly="not can_edit"/>
