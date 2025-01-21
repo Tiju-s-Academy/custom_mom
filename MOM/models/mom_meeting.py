@@ -92,9 +92,9 @@ class MomMeeting(models.Model):
     def write(self, vals):
         if self.env.user.has_group('MOM.group_mom_manager'):
             return super().write(vals)
-        
+            
         for record in self:
-            if record.state != 'draft' and not self.env.user.has_group('MOM.group_mom_manager'):
+            if record.state != 'draft':
                 return False
             if record.prepared_by_id.user_id != self.env.user:
                 return False

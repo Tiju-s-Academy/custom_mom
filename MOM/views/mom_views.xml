@@ -53,15 +53,20 @@
                     <notebook>
                         <page string="Attendees &amp; Departments">
                             <group>
-                                <field name="attendee_ids" widget="many2many_tags" readonly="not can_edit"/>
-                                <field name="absentee_ids" widget="many2many_tags" readonly="not can_edit"/>
-                                <field name="department_ids" widget="many2many_tags" readonly="not can_edit"/>
+                                <field name="attendee_ids" widget="many2many_tags" 
+                                       groups="MOM.group_mom_user,MOM.group_mom_manager"/>
+                                <field name="absentee_ids" widget="many2many_tags" 
+                                       groups="MOM.group_mom_user,MOM.group_mom_manager"/>
+                                <field name="department_ids" widget="many2many_tags" 
+                                       groups="MOM.group_mom_user,MOM.group_mom_manager"/>
                             </group>
                         </page>
                         <page string="Discussion">
                             <group>
-                                <field name="discussion_points" readonly="not can_edit"/>
-                                <field name="current_status" readonly="not can_edit"/>
+                                <field name="discussion_points" 
+                                       groups="MOM.group_mom_user,MOM.group_mom_manager"/>
+                                <field name="current_status" 
+                                       groups="MOM.group_mom_user,MOM.group_mom_manager"/>
                             </group>
                         </page>
                         <page string="Action Plans">
