@@ -99,3 +99,44 @@ class MomMeeting(models.Model):
             if record.prepared_by_id.user_id != self.env.user:
                 return False
         return super().write(vals)
+
+class MomActionPlan(models.Model):
+    _name = 'mom.action.plan'
+    _description = 'Action Plan'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
+
+    can_manage_action_items = fields.Boolean(compute='_compute_can_manage_action_items')
+
+    @api.depends('mom_id.prepared_by_id')
+    def _compute_can_manage_action_items(self):
+        for record in self:
+            record.can_manage_action_items = (
+                record.mom_id.prepared_by_id.user_id == self.env.user or 
+                self.env.user.has_group('MOM.group_mom_manager')
+            )
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        # Only allow creation by creator or manager
+        if not self.env.user.has_group('MOM.group_mom_manager'):
+            for vals in vals_list:
+                mom = self.env['mom.meeting'].browse(vals.get('mom_id'))
+                if mom.prepared_by_id.user_id != self.env.user:
+                    return False
+        return super().create(vals_list)
+
+    def write(self, vals):
+        # Only allow editing by creator or manager
+        if not self.env.user.has_group('MOM.group_mom_manager'):
+            for record in self:
+                if record.mom_id.prepared_by_id.user_id != self.env.user:
+                    return False
+        return super().write(vals)
+
+    def unlink(self):
+        # Only allow deletion by creator or manager
+        if not self.env.user.has_group('MOM.group_mom_manager'):
+            for record in self:
+                if record.mom_id.prepared_by_id.user_id != self.env.user:
+                    return False
+        return super().unlink()

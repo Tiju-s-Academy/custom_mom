@@ -73,15 +73,16 @@
                             <field name="action_plan_ids" context="{'default_mom_id': active_id}">
                                 <tree editable="bottom" decoration-success="state == 'completed'" 
                                       decoration-info="state == 'in_progress'" 
-                                      decoration-danger="state == 'pending'">
-                                    <control>
-                                        <create string="Add an Action Item"/>
-                                    </control>
-                                    <field name="name" string="Action Item"/>
-                                    <field name="responsible_id" string="Responsible Person"/>
-                                    <field name="deadline" string="Due Date"/>
-                                    <field name="notes" string="Notes"/>
-                                    <field name="state" widget="selection" string="Status"/>
+                                      decoration-danger="state == 'pending'"
+                                      create="can_manage_action_items"
+                                      delete="can_manage_action_items"
+                                      edit="can_manage_action_items">
+                                    <field name="name" string="Action Item" readonly="not can_manage_action_items"/>
+                                    <field name="responsible_id" string="Responsible Person" readonly="not can_manage_action_items"/>
+                                    <field name="deadline" string="Due Date" readonly="not can_manage_action_items"/>
+                                    <field name="notes" string="Notes" readonly="not can_manage_action_items"/>
+                                    <field name="state" widget="selection" string="Status" readonly="not can_manage_action_items"/>
+                                    <field name="can_manage_action_items" invisible="1"/>
                                 </tree>
                             </field>
                         </page>
