@@ -37,6 +37,8 @@ class MomMeeting(models.Model):
         ('approved', 'Approved'),
         ('cancelled', 'Cancelled')
     ], string='Status', default='draft', tracking=True)
+    is_creator = fields.Boolean(compute='_compute_is_creator', store=False)
+    manager_group = fields.Many2many('res.users', compute='_compute_manager_group')
 
     def _check_can_edit(self):
         """Check if current user can edit the record"""
@@ -53,3 +55,39 @@ class MomMeeting(models.Model):
                 record.duration = record.end_time - record.start_time
             else:
                 record.duration = 0.0
+
+    @api.depends('prepared_by_id', 'create_uid')
+    def _compute_is_creator(self):
+        for record in self:
+            record.is_creator = (
+                (record.prepared_by_id and record.prepared_by_id.user_id == self.env.user) or
+                (not record.id) or  # New record
+                record.create_uid == self.env.user or
+                self.env.user.has_group('MOM.group_mom_manager')
+            )
+
+    @api.depends_context('uid')
+    def _compute_manager_group(self):
+        manager_group = self.env.ref('MOM.group_mom_manager').users.ids
+        for record in self:
+            record.manager_group = manager_group
+
+    @api.model
+    def create(self, vals):
+        if not vals.get('prepared_by_id'):
+            employee = self.env['hr.employee'].search([('user_id', '=', self.env.user.id)], limit=1)
+            if employee:
+                vals['prepared_by_id'] = employee.id
+        return super().create(vals)
+
+    def write(self, vals):
+        # Always allow managers to edit
+        if self.env.user.has_group('MOM.group_mom_manager'):
+            return super().write(vals)
+            
+        # For normal users, only allow if they're the creator and in draft state
+        for record in self:
+            if record.prepared_by_id.user_id == self.env.user and record.state == 'draft':
+                return super(MomMeeting, self).write(vals)
+            
+        return super(MomMeeting, self).write(vals)
