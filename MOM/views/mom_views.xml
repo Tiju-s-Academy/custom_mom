@@ -74,7 +74,7 @@
                                 <tree editable="bottom" decoration-success="state == 'completed'" 
                                       decoration-info="state == 'in_progress'" 
                                       decoration-danger="state == 'pending'">
-                                    <field name="can_manage_action_items" invisible="1"/>
+                                    <field name="can_manage_action_items" column_invisible="True"/>
                                     <field name="name" string="Action Item" readonly="not can_manage_action_items"/>
                                     <field name="responsible_id" string="Responsible Person" readonly="not can_manage_action_items"/>
                                     <field name="deadline" string="Due Date" readonly="not can_manage_action_items"/>
