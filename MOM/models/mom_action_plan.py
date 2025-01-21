@@ -48,3 +48,9 @@ class MomActionPlan(models.Model):
                 if record.mom_id.prepared_by_id.user_id != self.env.user:
                     return False
         return super().unlink()
+
+    def action_mark_completed(self):
+        for record in self:
+            if record.can_manage_action_items:
+                record.write({'state': 'completed'})
+        return True
