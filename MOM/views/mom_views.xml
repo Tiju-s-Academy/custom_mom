@@ -35,20 +35,19 @@
                     </div>
                     <group>
                         <group>
-                            <field name="is_creator" invisible="1"/>
-                            <field name="meeting_date" force_save="1"/>
-                            <field name="start_time" widget="float_time" force_save="1"/>
-                            <field name="end_time" widget="float_time" force_save="1"/>
+                            <field name="meeting_date"/>
+                            <field name="start_time" widget="float_time"/>
+                            <field name="end_time" widget="float_time"/>
                             <field name="duration" widget="float_time" readonly="1"/>
-                            <field name="venue" force_save="1"/>
-                            <field name="location" invisible="venue == 'online'" force_save="1"/>
-                            <field name="meeting_type_id" options="{'no_create': True}" force_save="1"/>
+                            <field name="venue"/>
+                            <field name="location" invisible="venue == 'online'"/>
+                            <field name="meeting_type_id" options="{'no_create': True}"/>
                         </group>
                         <group>
-                            <field name="prepared_by_id" force_save="1"/>
-                            <field name="approved_by_id" force_save="1" readonly="not is_creator and not uid in manager_group"/>
-                            <field name="next_meeting_date" force_save="1"/>
-                            <field name="stage_id" force_save="1"/>
+                            <field name="prepared_by_id"/>
+                            <field name="approved_by_id"/>
+                            <field name="next_meeting_date"/>
+                            <field name="stage_id"/>
                         </group>
                     </group>
                     <notebook>

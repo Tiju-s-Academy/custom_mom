@@ -40,10 +40,19 @@ class MomMeeting(models.Model):
     is_creator = fields.Boolean(compute='_compute_is_creator', store=False)
     manager_group = fields.Many2many('res.users', compute='_compute_manager_group')
 
-    def _check_can_edit(self):
-        """Check if current user can edit the record"""
+    @api.model
+    def default_get(self, fields_list):
+        res = super().default_get(fields_list)
+        if 'prepared_by_id' not in res:
+            employee = self.env['hr.employee'].search([('user_id', '=', self.env.user.id)], limit=1)
+            if employee:
+                res['prepared_by_id'] = employee.id
+        return res
+
+    def can_edit(self):
         self.ensure_one()
         return (
+            not self.id or  # New record
             self.prepared_by_id.user_id == self.env.user or 
             self.env.user.has_group('MOM.group_mom_manager')
         )
@@ -81,13 +90,12 @@ class MomMeeting(models.Model):
         return super().create(vals)
 
     def write(self, vals):
-        # Always allow managers to edit
         if self.env.user.has_group('MOM.group_mom_manager'):
             return super().write(vals)
-            
-        # For normal users, only allow if they're the creator and in draft state
+        
         for record in self:
-            if record.prepared_by_id.user_id == self.env.user and record.state == 'draft':
-                return super(MomMeeting, self).write(vals)
-            
-        return super(MomMeeting, self).write(vals)
+            if record.state != 'draft' and not self.env.user.has_group('MOM.group_mom_manager'):
+                return False
+            if record.prepared_by_id.user_id != self.env.user:
+                return False
+        return super().write(vals)
