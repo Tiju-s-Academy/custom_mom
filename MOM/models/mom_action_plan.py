@@ -18,17 +18,22 @@ class MomActionPlan(models.Model):
     ], string='Status', default='pending', tracking=True)
     can_manage_action_items = fields.Boolean(compute='_compute_can_manage_action_items', store=False)
 
-    @api.depends('mom_id.prepared_by_id')
+    @api.depends('mom_id.prepared_by_id', 'responsible_id')
     def _compute_can_manage_action_items(self):
         for record in self:
             record.can_manage_action_items = (
                 record.mom_id.prepared_by_id.user_id == self.env.user or 
+                record.responsible_id.user_id == self.env.user or
                 self.env.user.has_group('MOM.group_mom_manager')
             )
 
     def write(self, vals):
         if not self.env.user.has_group('MOM.group_mom_manager'):
             for record in self:
+                # Allow responsible person to update only the state
+                if len(vals) == 1 and 'state' in vals and record.responsible_id.user_id == self.env.user:
+                    return super().write(vals)
+                # For other changes, check if user is creator
                 if record.mom_id.prepared_by_id.user_id != self.env.user:
                     return False
         return super().write(vals)
