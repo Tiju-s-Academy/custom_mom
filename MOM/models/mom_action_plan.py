@@ -51,12 +51,14 @@ class MomActionPlan(models.Model):
 
     def action_mark_completed(self):
         """Mark action plan as completed."""
-        self.ensure_one()
-        if self.can_manage_action_items:
-            self.state = 'completed'
-            # Log the state change in chatter
-            self.message_post(body="Action item marked as completed")
-        return {
-            'type': 'ir.actions.client',
-            'tag': 'reload',
-        }
+        for record in self:
+            if record.can_manage_action_items:
+                result = record.write({
+                    'state': 'completed'
+                })
+                if result:
+                    record.message_post(
+                        body="Action item marked as completed",
+                        message_type='notification'
+                    )
+        return True
