@@ -10,7 +10,12 @@
         - Approval workflow
         - Follow-up activities
     """,
-    'depends': ['base', 'mail', 'hr', 'board'],
+    'depends': [
+        'base', 
+        'mail', 
+        'hr', 
+        # 'board',  # Temporarily disabled
+    ],
     'data': [
         'security/mom_security.xml',
         'security/ir.model.access.csv',
@@ -21,7 +26,7 @@
         'views/mom_action_plan_views.xml',
         'views/mom_stage_views.xml',  # Add this line
         'views/mom_meeting_type_views.xml',  # Add this line
-        'views/mom_dashboard_views.xml',
+        # 'views/mom_dashboard_views.xml',  # Temporarily disabled
         'views/menu_views.xml',
     ],
     'installable': True,

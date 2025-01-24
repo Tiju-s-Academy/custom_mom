@@ -44,13 +44,14 @@
               web_icon="MOM,static/description/icon.png"
               sequence="100"/>
 
-    <!-- Dashboard Menu -->
+    <!-- Dashboard Menu - Temporarily disabled
     <menuitem
         id="menu_mom_dashboard"
         name="Dashboard"
         action="action_mom_dashboard"
         parent="menu_mom_root"
         sequence="1"/>
+    -->
 
     <!-- Meeting Minutes Menu -->
     <menuitem id="menu_mom_meetings"
