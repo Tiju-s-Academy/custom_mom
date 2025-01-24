@@ -39,6 +39,12 @@ class MomMeeting(models.Model):
     ], string='Status', default='draft', tracking=True)
     is_creator = fields.Boolean(compute='_compute_is_creator', store=False)
     manager_group = fields.Many2many('res.users', compute='_compute_manager_group')
+    total_count = fields.Integer(
+        string='Count',
+        compute='_compute_total_count',
+        store=True,
+        group_operator='sum'
+    )
 
     @api.model
     def default_get(self, fields_list):
@@ -80,6 +86,11 @@ class MomMeeting(models.Model):
         manager_group = self.env.ref('MOM.group_mom_manager').users.ids
         for record in self:
             record.manager_group = manager_group
+
+    @api.depends()
+    def _compute_total_count(self):
+        for record in self:
+            record.total_count = 1
 
     @api.model
     def create(self, vals):
