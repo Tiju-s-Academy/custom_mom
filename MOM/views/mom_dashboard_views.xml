@@ -8,7 +8,7 @@
             <graph string="Meeting Analysis" type="bar" sample="1">
                 <field name="meeting_type_id"/>
                 <field name="state"/>
-                <field name="__count" type="measure" string="Meeting Count"/>
+                <field name="id" type="measure" string="Meeting Count"/>
             </graph>
         </field>
     </record>
@@ -22,7 +22,7 @@
                 <field name="meeting_type_id" type="row"/>
                 <field name="department_ids" type="row"/>
                 <field name="state" type="col"/>
-                <field name="__count" type="measure" string="Meeting Count"/>
+                <field name="id" type="measure" string="Meeting Count"/>
             </pivot>
         </field>
     </record>
