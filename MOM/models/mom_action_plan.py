@@ -36,6 +36,11 @@ class MomActionPlan(models.Model):
                 self.env.user.has_group('MOM.group_mom_manager')
             )
 
+    @api.onchange('responsible_id')
+    def _onchange_responsible_id(self):
+        if self.responsible_id and self.responsible_id.department_id:
+            self.department_id = self.responsible_id.department_id.id
+
     def write(self, vals):
         if 'state' in vals and not self.env.user.has_group('MOM.group_mom_manager'):
             for record in self:
@@ -47,6 +52,11 @@ class MomActionPlan(models.Model):
             for record in self:
                 if record.mom_id.prepared_by_id.user_id != self.env.user:
                     return False
+        # Auto-fill department when responsible person changes
+        if vals.get('responsible_id') and not vals.get('department_id'):
+            employee = self.env['hr.employee'].browse(vals['responsible_id'])
+            if employee.department_id:
+                vals['department_id'] = employee.department_id.id
         return super().write(vals)
 
     @api.model_create_multi
@@ -56,6 +66,12 @@ class MomActionPlan(models.Model):
                 mom = self.env['mom.meeting'].browse(vals.get('mom_id'))
                 if mom.prepared_by_id.user_id != self.env.user:
                     return False
+        # Auto-fill department for each record
+        for vals in vals_list:
+            if vals.get('responsible_id') and not vals.get('department_id'):
+                employee = self.env['hr.employee'].browse(vals['responsible_id'])
+                if employee.department_id:
+                    vals['department_id'] = employee.department_id.id
         return super().create(vals_list)
 
     def unlink(self):
