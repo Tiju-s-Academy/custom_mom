@@ -10,7 +10,13 @@ class MomActionPlan(models.Model):
     responsible_id = fields.Many2one('hr.employee', string='Responsible Person', required=True)
     deadline = fields.Date('Deadline')
     notes = fields.Text('Notes')
-    department_id = fields.Many2one('hr.department', string='Department')
+    department_id = fields.Many2one(
+        'hr.department', 
+        string='Department', 
+        compute='_compute_department',
+        store=True,
+        compute_sudo=True
+    )
     state = fields.Selection([
         ('pending', 'Pending'),
         ('in_progress', 'In Progress'),
@@ -36,10 +42,10 @@ class MomActionPlan(models.Model):
                 self.env.user.has_group('MOM.group_mom_manager')
             )
 
-    @api.onchange('responsible_id')
-    def _onchange_responsible_id(self):
-        if self.responsible_id and self.responsible_id.department_id:
-            self.department_id = self.responsible_id.department_id.id
+    @api.depends('responsible_id.department_id')
+    def _compute_department(self):
+        for record in self:
+            record.department_id = record.responsible_id.department_id
 
     def write(self, vals):
         if 'state' in vals and not self.env.user.has_group('MOM.group_mom_manager'):
@@ -52,11 +58,6 @@ class MomActionPlan(models.Model):
             for record in self:
                 if record.mom_id.prepared_by_id.user_id != self.env.user:
                     return False
-        # Auto-fill department when responsible person changes
-        if vals.get('responsible_id') and not vals.get('department_id'):
-            employee = self.env['hr.employee'].browse(vals['responsible_id'])
-            if employee.department_id:
-                vals['department_id'] = employee.department_id.id
         return super().write(vals)
 
     @api.model_create_multi
@@ -66,12 +67,6 @@ class MomActionPlan(models.Model):
                 mom = self.env['mom.meeting'].browse(vals.get('mom_id'))
                 if mom.prepared_by_id.user_id != self.env.user:
                     return False
-        # Auto-fill department for each record
-        for vals in vals_list:
-            if vals.get('responsible_id') and not vals.get('department_id'):
-                employee = self.env['hr.employee'].browse(vals['responsible_id'])
-                if employee.department_id:
-                    vals['department_id'] = employee.department_id.id
         return super().create(vals_list)
 
     def unlink(self):

@@ -43,10 +43,10 @@
                         <group>
                             <field name="mom_id"/>
                             <field name="responsible_id"/>
-                            <field name="department_id"/>
+                            <field name="department_id" force_save="1" readonly="1"/>
+                            <field name="deadline"/>
                         </group>
                         <group>
-                            <field name="deadline"/>
                             <field name="notes"/>
                         </group>
                     </group>

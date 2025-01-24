@@ -77,6 +77,7 @@
                                     <field name="can_manage_action_items" column_invisible="True"/>
                                     <field name="name" string="Action Item" readonly="not can_manage_action_items"/>
                                     <field name="responsible_id" string="Responsible Person" readonly="not can_manage_action_items"/>
+                                    <field name="department_id" string="Department" readonly="not can_manage_action_items"/>
                                     <field name="deadline" string="Due Date" readonly="not can_manage_action_items"/>
                                     <field name="notes" string="Notes" readonly="not can_manage_action_items"/>
                                     <field name="state" widget="selection" string="Status" readonly="not can_manage_action_items"/>
