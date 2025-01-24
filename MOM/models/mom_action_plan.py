@@ -17,23 +17,34 @@ class MomActionPlan(models.Model):
         ('completed', 'Completed')
     ], string='Status', default='pending', tracking=True)
     can_manage_action_items = fields.Boolean(compute='_compute_can_manage_action_items', store=False)
+    can_edit_state = fields.Boolean(compute='_compute_can_edit_state', store=False)
 
-    @api.depends('mom_id.prepared_by_id', 'responsible_id')
+    @api.depends('mom_id.prepared_by_id')
     def _compute_can_manage_action_items(self):
         for record in self:
             record.can_manage_action_items = (
                 record.mom_id.prepared_by_id.user_id == self.env.user or 
-                record.responsible_id.user_id == self.env.user or
+                self.env.user.has_group('MOM.group_mom_manager')
+            )
+
+    @api.depends('responsible_id', 'mom_id.prepared_by_id')
+    def _compute_can_edit_state(self):
+        for record in self:
+            record.can_edit_state = (
+                record.responsible_id.user_id == self.env.user or 
+                record.mom_id.prepared_by_id.user_id == self.env.user or
                 self.env.user.has_group('MOM.group_mom_manager')
             )
 
     def write(self, vals):
+        if 'state' in vals and not self.env.user.has_group('MOM.group_mom_manager'):
+            for record in self:
+                # Allow state change only for responsible person or creator
+                if not (record.responsible_id.user_id == self.env.user or 
+                        record.mom_id.prepared_by_id.user_id == self.env.user):
+                    return False
         if not self.env.user.has_group('MOM.group_mom_manager'):
             for record in self:
-                # Allow responsible person to update only the state
-                if len(vals) == 1 and 'state' in vals and record.responsible_id.user_id == self.env.user:
-                    return super().write(vals)
-                # For other changes, check if user is creator
                 if record.mom_id.prepared_by_id.user_id != self.env.user:
                     return False
         return super().write(vals)
@@ -55,15 +66,7 @@ class MomActionPlan(models.Model):
         return super().unlink()
 
     def action_mark_completed(self):
-        """Mark action plan as completed."""
         for record in self:
             if record.can_manage_action_items:
-                result = record.write({
-                    'state': 'completed'
-                })
-                if result:
-                    record.message_post(
-                        body="Action item marked as completed",
-                        message_type='notification'
-                    )
+                record.write({'state': 'completed'})
         return True
