@@ -5,10 +5,10 @@
         <field name="name">mom.meeting.graph</field>
         <field name="model">mom.meeting</field>
         <field name="arch" type="xml">
-            <graph string="Meeting Analysis" type="bar">
+            <graph string="Meeting Analysis" type="bar" sample="1">
                 <field name="meeting_type_id"/>
                 <field name="state"/>
-                <field name="name" type="measure" string="Count" operator="count"/>
+                <field name="id" string="Count" type="measure"/>
             </graph>
         </field>
     </record>
@@ -18,11 +18,11 @@
         <field name="name">mom.meeting.pivot</field>
         <field name="model">mom.meeting</field>
         <field name="arch" type="xml">
-            <pivot string="Meeting Analysis">
+            <pivot string="Meeting Analysis" sample="1">
                 <field name="meeting_type_id" type="row"/>
                 <field name="department_id" type="row"/>
                 <field name="state" type="col"/>
-                <field name="name" type="measure" string="Count" operator="count"/>
+                <field name="id" string="Count" type="measure"/>
             </pivot>
         </field>
     </record>
