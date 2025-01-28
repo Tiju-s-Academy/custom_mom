@@ -8,6 +8,7 @@
             <tree>
                 <field name="name"/>
                 <field name="meeting_date"/>
+                <field name="meeting_type_id"/>
                 <field name="prepared_by_id"/>
                 <field name="state"/>
             </tree>
@@ -21,8 +22,8 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="action_submit" string="Submit for Approval" type="object" 
-                            class="oe_highlight" invisible="state != 'draft'"
+                    <button name="action_submit" string="Submit" type="object" 
+                            class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}" 
                             groups="MOM.group_mom_user,MOM.group_mom_manager"/>
                     <field name="state" widget="statusbar"/>
                 </header>
@@ -165,8 +166,6 @@
                 <field name="meeting_type_id"/>
                 <filter string="My Meetings" name="my_meetings" 
                         domain="[('prepared_by_id.user_id', '=', uid)]"/>
-                <filter string="To Approve" name="to_approve" 
-                        domain="[('state', '=', 'submitted')]"/>
                 <group expand="0" string="Group By">
                     <filter string="Department" name="group_by_department" 
                             context="{'group_by': 'department_id'}"/>
