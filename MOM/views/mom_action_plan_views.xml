@@ -22,12 +22,13 @@
         <field name="model">mom.action.plan</field>
         <field name="arch" type="xml">
             <form>
+                <field name="can_manage_action_items" invisible="1"/>
                 <header>
                     <button name="action_mark_completed" 
                             string="Mark as Completed" 
                             type="object" 
                             class="btn-primary"
-                            invisible="state == 'done' or (responsible_id.user_id != uid and not can_manage_action_items)"/>
+                            invisible="state == 'completed' or (responsible_id.user_id != uid and not can_manage_action_items)"/>
                     <field name="state" widget="statusbar" 
                            statusbar_visible="pending,in_progress,completed"/>
                     <field name="can_edit_state" invisible="1"/>
