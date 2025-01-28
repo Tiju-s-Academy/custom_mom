@@ -39,14 +39,14 @@
 
         <!-- Record Rules -->
         <record id="rule_mom_meeting_user" model="ir.rule">
-            <field name="name">Users: Access to Own, Attended, or Action Plan Meetings</field>
+            <field name="name">Users: Access to Own and Attended Meetings</field>
             <field name="model_id" ref="model_mom_meeting"/>
             <field name="domain_force">['|', '|', '|',
                 ('prepared_by_id.user_id', '=', user.id),
                 ('attendee_ids.user_id', '=', user.id),
                 ('create_uid', '=', user.id),
                 ('action_plan_ids.responsible_id.user_id', '=', user.id)]</field>
-            <field name="perm_read" eval="False"/>
+            <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_unlink" eval="True"/>
