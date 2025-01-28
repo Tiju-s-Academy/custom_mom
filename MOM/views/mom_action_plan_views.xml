@@ -23,10 +23,16 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="action_mark_completed" string="Mark as Completed" 
-                            type="object" class="oe_highlight" 
-                            invisible="state == 'completed'"
-                            groups="MOM.group_mom_manager"/>
+                    <button name="action_mark_completed" 
+                            string="Mark as Completed" 
+                            type="object" 
+                            class="btn-primary" 
+                            attrs="{'invisible': ['|', 
+                                                ('state', '=', 'done'),
+                                                '&amp;',
+                                                ('responsible_id.user_id', '!=', uid),
+                                                ('can_manage_action_items', '=', False)]}"
+                    />
                     <field name="state" widget="statusbar" 
                            statusbar_visible="pending,in_progress,completed"
                            clickable="1"
