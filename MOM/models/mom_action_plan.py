@@ -48,16 +48,7 @@ class MomActionPlan(models.Model):
             record.department_id = record.responsible_id.department_id
 
     def write(self, vals):
-        if 'state' in vals and not self.env.user.has_group('MOM.group_mom_manager'):
-            for record in self:
-                # Allow state change only for responsible person or creator
-                if not (record.responsible_id.user_id == self.env.user or 
-                        record.mom_id.prepared_by_id.user_id == self.env.user):
-                    return False
-        if not self.env.user.has_group('MOM.group_mom_manager'):
-            for record in self:
-                if record.mom_id.prepared_by_id.user_id != self.env.user:
-                    return False
+        # Remove state change restrictions
         return super().write(vals)
 
     @api.model_create_multi
@@ -78,6 +69,5 @@ class MomActionPlan(models.Model):
 
     def action_mark_completed(self):
         for record in self:
-            if record.can_manage_action_items:
-                record.write({'state': 'completed'})
+            record.write({'state': 'completed'})
         return True

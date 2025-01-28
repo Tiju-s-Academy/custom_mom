@@ -31,7 +31,7 @@
                             invisible="state == 'completed'"/>
                     <field name="state" widget="statusbar" 
                            statusbar_visible="pending,in_progress,completed"
-                           clickable="1"/>
+                           options="{'clickable': true}"/>
                     <field name="can_edit_state" invisible="1"/>
                 </header>
                 <sheet>
