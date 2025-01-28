@@ -28,9 +28,10 @@
                             string="Mark as Completed" 
                             type="object" 
                             class="btn-primary"
-                            invisible="state == 'completed' or (responsible_id.user_id != uid and not can_manage_action_items)"/>
+                            invisible="state == 'completed'"/>
                     <field name="state" widget="statusbar" 
-                           statusbar_visible="pending,in_progress,completed"/>
+                           statusbar_visible="pending,in_progress,completed"
+                           clickable="1"/>
                     <field name="can_edit_state" invisible="1"/>
                 </header>
                 <sheet>
