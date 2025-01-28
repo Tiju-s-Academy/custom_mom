@@ -23,7 +23,7 @@
             <form>
                 <header>
                     <button name="action_submit" string="Submit" type="object" 
-                            class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}" 
+                            class="oe_highlight" invisible="state != 'draft'"
                             groups="MOM.group_mom_user,MOM.group_mom_manager"/>
                     <field name="state" widget="statusbar"/>
                 </header>
