@@ -26,17 +26,10 @@
                     <button name="action_mark_completed" 
                             string="Mark as Completed" 
                             type="object" 
-                            class="btn-primary" 
-                            attrs="{'invisible': ['|', 
-                                                ('state', '=', 'done'),
-                                                '&amp;',
-                                                ('responsible_id.user_id', '!=', uid),
-                                                ('can_manage_action_items', '=', False)]}"
-                    />
+                            class="btn-primary"
+                            invisible="state == 'done' or (responsible_id.user_id != uid and not can_manage_action_items)"/>
                     <field name="state" widget="statusbar" 
-                           statusbar_visible="pending,in_progress,completed"
-                           clickable="1"
-                           options="{'clickable': [('can_edit_state', '=', True)]}"/>
+                           statusbar_visible="pending,in_progress,completed"/>
                     <field name="can_edit_state" invisible="1"/>
                 </header>
                 <sheet>
