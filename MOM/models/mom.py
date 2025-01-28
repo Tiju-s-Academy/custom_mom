@@ -36,9 +36,14 @@ class MemorandumOfMeeting(models.Model):
     prepared_by_id = fields.Many2one('hr.employee', string='Prepared By', 
                                    readonly=True, required=True, default=lambda self: self.env.user.employee_id.id)
     
+    approved_by_id = fields.Many2one('hr.employee', string='Approved By', 
+                                   compute='_compute_approved_by', store=True, readonly=True)
+    
     state = fields.Selection([
         ('draft', 'Draft'),
-        ('submitted', 'Submitted')
+        ('submitted', 'Submitted'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected')
     ], default='draft', tracking=True)
     
     stage_id = fields.Many2one('mom.stage', string='Stage', 
@@ -68,6 +73,14 @@ class MemorandumOfMeeting(models.Model):
         for record in self:
             record.department_id = record.prepared_by_id.department_id
 
+    @api.depends('prepared_by_id')
+    def _compute_approved_by(self):
+        for record in self:
+            if record.prepared_by_id and record.prepared_by_id.parent_id:
+                record.approved_by_id = record.prepared_by_id.parent_id
+            else:
+                record.approved_by_id = record.prepared_by_id  # Auto-approve if no manager
+
     @api.constrains('prepared_by_id')
     def _check_prepared_by(self):
         for record in self:
@@ -82,9 +95,11 @@ class MemorandumOfMeeting(models.Model):
         return super().create(vals_list)
 
     def action_submit(self):
-        """Submit the meeting minutes"""
+        """Submit and auto-approve the meeting minutes"""
         for record in self:
-            record.state = 'submitted'
+            record.write({
+                'state': 'approved',  # Directly set to approved
+            })
         return True
 
     @api.model
