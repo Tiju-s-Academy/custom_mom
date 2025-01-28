@@ -9,7 +9,6 @@
                 <field name="name"/>
                 <field name="meeting_date"/>
                 <field name="prepared_by_id"/>
-                <field name="approved_by_id"/>
                 <field name="state"/>
             </tree>
         </field>
@@ -45,7 +44,6 @@
                         </group>
                         <group>
                             <field name="prepared_by_id"/>
-                            <field name="approved_by_id"/>
                             <field name="next_meeting_date"/>
                             <field name="stage_id"/>
                         </group>
@@ -164,7 +162,6 @@
             <search>
                 <field name="name"/>
                 <field name="prepared_by_id"/>
-                <field name="approved_by_id"/>
                 <field name="meeting_type_id"/>
                 <filter string="My Meetings" name="my_meetings" 
                         domain="[('prepared_by_id.user_id', '=', uid)]"/>
