@@ -38,19 +38,23 @@
         </function>
 
         <!-- Record Rules -->
-        <record id="mom_meeting_user_rule" model="ir.rule">
-            <field name="name">Users can see their own meetings and meetings they attend</field>
+        <record id="rule_mom_meeting_user" model="ir.rule">
+            <field name="name">Users: Access to Own, Attended, or Action Plan Meetings</field>
             <field name="model_id" ref="model_mom_meeting"/>
-            <field name="domain_force">['|', '|',
+            <field name="domain_force">['|', '|', '|',
                 ('prepared_by_id.user_id', '=', user.id),
                 ('attendee_ids.user_id', '=', user.id),
-                ('absentee_ids.user_id', '=', user.id)]</field>
-            <field name="groups" eval="[(4, ref('group_mom_user'))]"/>
-            <field name="perm_read" eval="True"/>
+                ('create_uid', '=', user.id),
+                ('action_plan_ids.responsible_id.user_id', '=', user.id)]</field>
+            <field name="perm_read" eval="False"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
-            <field name="perm_unlink" eval="False"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="groups" eval="[(4, ref('group_mom_user'))]"/>
         </record>
+
+        <!-- Remove the global read access rule -->
+        <!-- <record id="rule_mom_meeting_global_read" ...> -->
 
         <record id="mom_meeting_manager_rule" model="ir.rule">
             <field name="name">MOM Managers can see all meetings</field>
@@ -65,12 +69,12 @@
 
         <!-- Update Meeting Attendee Rule -->
         <record id="mom_meeting_attendee_rule" model="ir.rule">
-            <field name="name">Attendees can view their meetings</field>
+            <field name="name">Attendees: Access to Attended Meetings or Action Plans</field>
             <field name="model_id" ref="model_mom_meeting"/>
             <field name="domain_force">['|', '|',
                 ('attendee_ids.user_id', '=', user.id),
                 ('prepared_by_id.user_id', '=', user.id),
-                ('absentee_ids.user_id', '=', user.id)]</field>
+                ('action_plan_ids.responsible_id.user_id', '=', user.id)]</field>
             <field name="groups" eval="[(4, ref('group_mom_attendee'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="False"/>
