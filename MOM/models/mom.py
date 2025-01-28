@@ -38,9 +38,7 @@ class MemorandumOfMeeting(models.Model):
     
     state = fields.Selection([
         ('draft', 'Draft'),
-        ('submitted', 'Submitted'),
-        ('approved', 'Approved'),
-        ('rejected', 'Rejected')
+        ('submitted', 'Submitted')
     ], default='draft', tracking=True)
     
     stage_id = fields.Many2one('mom.stage', string='Stage', 
@@ -84,6 +82,7 @@ class MemorandumOfMeeting(models.Model):
         return super().create(vals_list)
 
     def action_submit(self):
+        """Submit the meeting minutes"""
         for record in self:
             record.state = 'submitted'
         return True

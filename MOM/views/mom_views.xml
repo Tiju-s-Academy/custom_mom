@@ -25,7 +25,7 @@
                     <button name="action_submit" string="Submit" type="object" 
                             class="oe_highlight" invisible="state != 'draft'"
                             groups="MOM.group_mom_user,MOM.group_mom_manager"/>
-                    <field name="state" widget="statusbar"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
