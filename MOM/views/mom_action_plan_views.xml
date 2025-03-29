@@ -8,6 +8,7 @@
             <tree decoration-success="state == 'completed'" decoration-info="state == 'in_progress'" decoration-danger="state == 'pending'">
                 <field name="name"/>
                 <field name="mom_id"/>
+                <field name="meeting_type_id"/>
                 <field name="responsible_id"/>
                 <field name="department_id"/>
                 <field name="deadline"/>
@@ -43,6 +44,7 @@
                     <group>
                         <group>
                             <field name="mom_id"/>
+                            <field name="meeting_type_id" readonly="1"/>
                             <field name="responsible_id"/>
                             <field name="department_id" force_save="1" readonly="1"/>
                             <field name="deadline"/>
@@ -69,6 +71,7 @@
             <search>
                 <field name="name"/>
                 <field name="mom_id"/>
+                <field name="meeting_type_id"/>
                 <field name="responsible_id"/>
                 <field name="department_id"/>
                 <filter string="My Action Items" name="my_actions" 
@@ -80,8 +83,8 @@
                 <filter string="Completed" name="completed" 
                         domain="[('state', '=', 'completed')]"/>
                 <group expand="0" string="Group By">
-                    <filter string="Meeting" name="group_by_mom" 
-                            context="{'group_by': 'mom_id'}"/>
+                    <filter string="Meeting Type" name="group_by_meeting_type" context="{'group_by': 'meeting_type_id'}"/>
+                    <filter string="Meeting" name="group_by_mom" context="{'group_by': 'mom_id'}"/>
                     <filter string="Responsible" name="group_by_responsible" 
                             context="{'group_by': 'responsible_id'}"/>
                     <filter string="Status" name="group_by_state" 
