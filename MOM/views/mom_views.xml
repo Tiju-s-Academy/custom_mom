@@ -73,7 +73,8 @@
                             <field name="action_plan_ids" context="{'default_mom_id': active_id}">
                                 <tree editable="bottom" decoration-success="state == 'completed'" 
                                       decoration-info="state == 'in_progress'" 
-                                      decoration-danger="state == 'pending'">
+                                      decoration-danger="state == 'pending'"
+                                      decoration-warning="state == 'hold'">
                                     <field name="can_manage_action_items" column_invisible="True"/>
                                     <field name="name" string="Action Item" readonly="not can_manage_action_items"/>
                                     <field name="responsible_id" string="Responsible Person" readonly="not can_manage_action_items"/>

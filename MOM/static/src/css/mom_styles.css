@@ -13,6 +13,11 @@
     color: #9c0006 !important;
 }
 
+.o_list_view .text-warning {
+    background-color: #fff2cc !important;
+    color: #856404 !important;
+}
+
 /* Department Tag Colors */
 .o_kanban_record .o_field_many2many_tags .badge[data-color="0"] {
     background-color: #e1f0ff !important;

@@ -22,6 +22,7 @@ class MomActionPlan(models.Model):
     state = fields.Selection([
         ('pending', 'Pending'),
         ('in_progress', 'In Progress'),
+        ('hold', 'Hold'),
         ('completed', 'Completed')
     ], string='Status', default='pending', tracking=True)
     can_manage_action_items = fields.Boolean(compute='_compute_can_manage_action_items', store=False)
