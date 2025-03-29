@@ -7,8 +7,9 @@
         <field name="arch" type="xml">
             <tree decoration-success="state == 'completed'" decoration-info="state == 'in_progress'" decoration-danger="state == 'pending'">
                 <field name="name"/>
-                <field name="mom_id"/>
                 <field name="meeting_type_id"/>
+                <field name="meeting_date"/>
+                <field name="mom_id" invisible="1"/>
                 <field name="responsible_id"/>
                 <field name="department_id"/>
                 <field name="deadline"/>
