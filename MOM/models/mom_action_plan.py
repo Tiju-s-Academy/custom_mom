@@ -8,7 +8,7 @@ class MomActionPlan(models.Model):
     name = fields.Char('Action Item', required=True, tracking=True)
     mom_id = fields.Many2one('mom.meeting', string='Meeting', required=True, ondelete='cascade')
     meeting_type_id = fields.Many2one(related='mom_id.meeting_type_id', string='Meeting Type', store=True, readonly=True)
-    meeting_date = fields.Date(related='mom_id.date', string='Meeting Date', store=True, readonly=True)
+    meeting_date = fields.Date(related='mom_id.meeting_date', string='Meeting Date', store=True, readonly=True)
     responsible_id = fields.Many2one('hr.employee', string='Responsible Person', required=True)
     deadline = fields.Date('Deadline')
     notes = fields.Text('Notes')
