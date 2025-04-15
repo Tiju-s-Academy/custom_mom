@@ -5,17 +5,21 @@
         <field name="name">mom.action.plan.tree</field>
         <field name="model">mom.action.plan</field>
         <field name="arch" type="xml">
-            <tree decoration-success="state == 'completed'" 
-                  decoration-info="state == 'in_progress'" 
-                  decoration-danger="state == 'pending'"
-                  decoration-warning="state == 'hold'">
+            <tree decoration-success="time_status == 'lead_time'"
+                  decoration-danger="time_status == 'lag_time'"
+                  decoration-warning="time_status == 'buffer_time'"
+                  decoration-info="time_status == 'cycle_time_1'"
+                  decoration-bf-warning="time_status == 'cycle_time_2'"
+                  decoration-bf-danger="time_status == 'cycle_time_3' or time_status == 'cycle_time_4+'">
                 <field name="name"/>
                 <field name="meeting_type_id"/>
                 <field name="meeting_date"/>
                 <field name="responsible_id"/>
                 <field name="department_id"/>
                 <field name="deadline"/>
+                <field name="time_status"/>
                 <field name="state"/>
+                <field name="cycle_count"/>
             </tree>
         </field>
     </record>
@@ -34,10 +38,19 @@
                             type="object" 
                             class="btn-primary"
                             invisible="state == 'completed'"/>
+                    <button name="action_extend_deadline"
+                            string="Grant Buffer Time"
+                            type="object"
+                            class="btn-warning"
+                            groups="MOM.group_mom_manager"
+                            invisible="time_status != 'lag_time' or state == 'completed'"/>
+                    <button name="action_extend_cycle"
+                            string="Extend Cycle Time"
+                            type="object"
+                            class="btn-danger"
+                            invisible="time_status not in ('cycle_time_1', 'cycle_time_2', 'cycle_time_3') or state == 'completed'"/>
                     <field name="state" widget="statusbar" 
-                           statusbar_visible="pending,in_progress,hold,completed"
-                           options="{'clickable': true}"/>
-                    <field name="can_edit_state" invisible="1"/>
+                           statusbar_visible="pending,in_progress,hold,completed"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
@@ -52,8 +65,12 @@
                             <field name="responsible_id"/>
                             <field name="department_id" force_save="1" readonly="1"/>
                             <field name="deadline"/>
+                            <field name="completion_date" readonly="1" attrs="{'invisible': [('state', '!=', 'completed')]}"/>
                         </group>
                         <group>
+                            <field name="time_status"/>
+                            <field name="cycle_count"/>
+                            <field name="extension_reason" attrs="{'invisible': [('extension_reason', '=', False)]}"/>
                             <field name="notes"/>
                         </group>
                     </group>
