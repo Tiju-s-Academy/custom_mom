@@ -5,7 +5,12 @@
         <field name="name">mom.action.plan.tree</field>
         <field name="model">mom.action.plan</field>
         <field name="arch" type="xml">
-            <tree>
+            <tree decoration-success="time_status == 'lead_time'"
+                  decoration-danger="time_status == 'lag_time'"
+                  decoration-warning="time_status == 'buffer_time'"
+                  decoration-primary="time_status == 'cycle_time_1'"
+                  decoration-info="time_status == 'cycle_time_2'"
+                  decoration-muted="time_status in ('cycle_time_3', 'cycle_time_4+')">
                 <field name="name"/>
                 <field name="meeting_type_id"/>
                 <field name="meeting_date"/>
@@ -13,7 +18,7 @@
                 <field name="department_id"/>
                 <field name="deadline"/>
                 <field name="time_status"/>
-                <field name="cycle_count"/>
+                <field name="cycle_count" readonly="1"/>
                 <field name="state"/>
             </tree>
         </field>
@@ -64,7 +69,7 @@
                         </group>
                         <group>
                             <field name="time_status"/>
-                            <field name="cycle_count"/>
+                            <field name="cycle_count" readonly="1"/>
                             <field name="extension_reason" invisible="not extension_reason"/>
                             <field name="notes"/>
                         </group>
