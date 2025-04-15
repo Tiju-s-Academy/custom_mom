@@ -99,104 +99,28 @@ class MomActionPlan(models.Model):
                 return 'cycle_time_4+'
             return f'cycle_time_{cycle}'
 
-    # Action methods
-    def action_set_pending(self):
-        if self.env.user.has_group('MOM.group_mom_manager'):
-            return self.write({'state': 'pending'})
-        return False
-
-    def action_set_in_progress(self):
-        if self.env.user.has_group('MOM.group_mom_manager'):
-            return self.write({'state': 'in_progress'})
-        return False
-
-    def action_set_hold(self):
-        if self.env.user.has_group('MOM.group_mom_manager'):
-            return self.write({'state': 'hold'})
-        return False
-
-    def action_mark_completed(self):
-        if self.env.user.has_group('MOM.group_mom_manager'):
-            for record in self:
-                record.write({
-                    'state': 'completed',
-                    'completion_date': fields.Date.today()
-                })
-            return True
-        return False
-
-    def action_extend_deadline(self):
-        self.ensure_one()
-        if not self.deadline:
-            raise UserError(_("Cannot extend deadline: No initial deadline set."))
-            
-        if not self.env.user.has_group('MOM.group_mom_manager'):
-            raise UserError(_("Only MOM managers can extend buffer time."))
-            
-        if self.time_status == 'lag_time':
-            self.write({
-                'deadline': fields.Date.today() + timedelta(days=2),
-                'extension_reason': _('Buffer time granted by manager'),
-            })
-        else:
-            raise UserError(_("Buffer time can only be granted during lag time period."))
-
-    def action_extend_cycle(self):
-        self.ensure_one()
-        if not self.deadline:
-            raise UserError(_("Cannot extend cycle: No initial deadline set."))
-            
-        if self.cycle_count >= 4:
-            raise UserError(_("Maximum cycle extensions reached."))
-            
-        self.write({
-            'deadline': fields.Date.today() + timedelta(days=2),
-            'cycle_count': self.cycle_count + 1
-        })
-
-    # Existing code remains unchanged
-    @api.depends('responsible_id.department_id')
-    def _compute_department(self):
-        for record in self:
-            record.department_id = record.responsible_id.department_id
-
-    @api.depends('mom_id.prepared_by_id')
-    def _compute_can_manage_action_items(self):
-        for record in self:
-            record.can_manage_action_items = (
-                record.mom_id.prepared_by_id.user_id == self.env.user or 
-                self.env.user.has_group('MOM.group_mom_manager')
-            )
-
-    @api.depends('responsible_id', 'mom_id.prepared_by_id')
-    def _compute_can_edit_state(self):
-        for record in self:
-            is_manager = self.env.user.has_group('MOM.group_mom_manager')
-            is_responsible = record.responsible_id.user_id == self.env.user
-            record.can_edit_state = (
-                is_responsible or is_manager or
-                record.mom_id.prepared_by_id.user_id == self.env.user
-            )
-
     def write(self, vals):
-        # Track state changes in chatter
         if 'state' in vals:
             old_state = self.state
             new_state = vals['state']
-            # Auto-set completion date for completed state
+            
+            # Auto-set completion date
             if new_state == 'completed':
                 vals['completion_date'] = fields.Date.today()
-            
+            elif old_state == 'completed' and new_state != 'completed':
+                vals['completion_date'] = False
+                
             result = super().write(vals)
             
-            # Log the state change in chatter
+            # Log the state change
             if result:
-                message = _("State changed from '%s' to '%s' by %s") % (
-                    dict(self._fields['state'].selection).get(old_state),
-                    dict(self._fields['state'].selection).get(new_state),
-                    self.env.user.name
+                message = _(
+                    "Status changed from '%(old)s' to '%(new)s' by %(user)s",
+                    old=dict(self._fields['state'].selection).get(old_state),
+                    new=dict(self._fields['state'].selection).get(new_state),
+                    user=self.env.user.name
                 )
-                self.message_post(body=message, tracking_value_ids=[])
+                self.message_post(body=message)
             return result
             
         return super().write(vals)
