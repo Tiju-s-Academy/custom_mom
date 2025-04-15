@@ -178,7 +178,10 @@ class MomActionPlan(models.Model):
             )
 
     def write(self, vals):
-        # Remove state change restrictions
+        if 'state' in vals and not self.env.user.has_group('MOM.group_mom_manager'):
+            return False
+        if vals.get('state') == 'completed':
+            vals['completion_date'] = fields.Date.today()
         return super().write(vals)
 
     @api.model_create_multi
