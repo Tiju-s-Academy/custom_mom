@@ -171,17 +171,38 @@ class MomActionPlan(models.Model):
     @api.depends('responsible_id', 'mom_id.prepared_by_id')
     def _compute_can_edit_state(self):
         for record in self:
+            is_manager = self.env.user.has_group('MOM.group_mom_manager')
+            is_responsible = record.responsible_id.user_id == self.env.user
             record.can_edit_state = (
-                record.responsible_id.user_id == self.env.user or 
-                record.mom_id.prepared_by_id.user_id == self.env.user or
-                self.env.user.has_group('MOM.group_mom_manager')
+                is_responsible or is_manager or
+                record.mom_id.prepared_by_id.user_id == self.env.user
             )
 
     def write(self, vals):
-        if 'state' in vals and not self.env.user.has_group('MOM.group_mom_manager'):
+        # Allow responsible person to update certain fields
+        is_responsible = self.responsible_id.user_id == self.env.user
+        is_manager = self.env.user.has_group('MOM.group_mom_manager')
+        
+        if 'state' in vals:
+            new_state = vals['state']
+            # Only managers can complete or hold tasks
+            if new_state in ['completed', 'hold'] and not is_manager:
+                return False
+            # Responsible can toggle between pending and in_progress
+            if not (is_responsible or is_manager):
+                return False
+            # Auto-set completion date for completed state
+            if new_state == 'completed':
+                vals['completion_date'] = fields.Date.today()
+                
+        # Responsible can update notes and progress-related fields
+        allowed_fields = {'notes', 'state'} if is_responsible else set()
+        has_forbidden_fields = any(f not in allowed_fields for f in vals.keys() 
+                                 if f not in {'state', 'notes', '__last_update'})
+        
+        if has_forbidden_fields and not is_manager:
             return False
-        if vals.get('state') == 'completed':
-            vals['completion_date'] = fields.Date.today()
+            
         return super().write(vals)
 
     @api.model_create_multi
