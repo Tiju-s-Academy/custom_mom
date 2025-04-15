@@ -5,12 +5,7 @@
         <field name="name">mom.action.plan.tree</field>
         <field name="model">mom.action.plan</field>
         <field name="arch" type="xml">
-            <tree decoration-success="time_status == 'lead_time'"
-                  decoration-danger="time_status == 'lag_time'"
-                  decoration-warning="time_status == 'buffer_time'"
-                  decoration-info="time_status == 'cycle_time_1'"
-                  decoration-primary="time_status == 'cycle_time_2'"
-                  decoration-dark="time_status == 'cycle_time_3' or time_status == 'cycle_time_4+'">
+            <tree>
                 <field name="name"/>
                 <field name="meeting_type_id"/>
                 <field name="meeting_date"/>
