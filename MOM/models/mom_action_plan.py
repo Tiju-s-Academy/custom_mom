@@ -29,6 +29,18 @@ class MomActionPlan(models.Model):
         ('completed', 'Completed')
     ], string='Status', default='pending', tracking=True)
 
+    # Fields for action item management
+    can_manage_action_items = fields.Boolean(
+        string='Can Manage Action Items',
+        compute='_compute_can_manage_action_items',
+        store=False
+    )
+    can_edit_state = fields.Boolean(
+        string='Can Edit State',
+        compute='_compute_can_edit_state',
+        store=False
+    )
+
     # New fields for deadline tracking
     deadline = fields.Date('Block Time (Deadline)', required=True, tracking=True)
     completion_date = fields.Date('Completion Date', tracking=True)
