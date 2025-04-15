@@ -81,6 +81,9 @@ class MomActionPlan(models.Model):
             elif record.state != 'completed':
                 if today <= record.deadline:
                     record.time_status = 'lead_time'
+                elif not self.env.user.has_group('MOM.group_mom_manager'):
+                    # Only auto-move to lag time for non-managers
+                    record.time_status = 'lag_time'
                 else:
                     days_late = (today - record.deadline).days
                     record.time_status = record._get_time_status(days_late)
@@ -97,6 +100,31 @@ class MomActionPlan(models.Model):
             return f'cycle_time_{cycle}'
 
     # Action methods
+    def action_set_pending(self):
+        if self.env.user.has_group('MOM.group_mom_manager'):
+            return self.write({'state': 'pending'})
+        return False
+
+    def action_set_in_progress(self):
+        if self.env.user.has_group('MOM.group_mom_manager'):
+            return self.write({'state': 'in_progress'})
+        return False
+
+    def action_set_hold(self):
+        if self.env.user.has_group('MOM.group_mom_manager'):
+            return self.write({'state': 'hold'})
+        return False
+
+    def action_mark_completed(self):
+        if self.env.user.has_group('MOM.group_mom_manager'):
+            for record in self:
+                record.write({
+                    'state': 'completed',
+                    'completion_date': fields.Date.today()
+                })
+            return True
+        return False
+
     def action_extend_deadline(self):
         self.ensure_one()
         if not self.deadline:
@@ -131,14 +159,6 @@ class MomActionPlan(models.Model):
     def _compute_department(self):
         for record in self:
             record.department_id = record.responsible_id.department_id
-
-    def action_mark_completed(self):
-        for record in self:
-            record.write({
-                'state': 'completed',
-                'completion_date': fields.Date.today()
-            })
-        return True
 
     @api.depends('mom_id.prepared_by_id')
     def _compute_can_manage_action_items(self):

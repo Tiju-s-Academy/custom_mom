@@ -82,27 +82,29 @@
         <field name="model">mom.action.plan</field>
         <field name="arch" type="xml">
             <form>
-                <field name="can_manage_action_items" invisible="1"/>
-                <field name="mom_id" invisible="1"/>
                 <header>
-                    <button name="action_mark_completed" 
-                            string="Mark as Completed" 
-                            type="object" 
-                            class="btn-primary"
-                            invisible="state == 'completed'"/>
-                    <button name="action_extend_deadline"
-                            string="Grant Buffer Time"
+                    <button name="action_set_pending" 
+                            string="Set Pending" 
                             type="object"
-                            class="btn-warning"
-                            groups="MOM.group_mom_manager"
-                            invisible="time_status != 'lag_time' or state == 'completed'"/>
-                    <button name="action_extend_cycle"
-                            string="Extend Cycle Time"
+                            attrs="{'invisible': [('state', '=', 'pending')]}"
+                            groups="MOM.group_mom_manager"/>
+                    <button name="action_set_in_progress"
+                            string="Set In Progress"
                             type="object"
-                            class="btn-danger"
-                            invisible="time_status not in ('cycle_time_1', 'cycle_time_2', 'cycle_time_3') or state == 'completed'"/>
-                    <field name="state" widget="statusbar" 
-                           statusbar_visible="pending,in_progress,hold,completed"/>
+                            attrs="{'invisible': [('state', '=', 'in_progress')]}"
+                            groups="MOM.group_mom_manager"/>
+                    <button name="action_set_hold"
+                            string="Put on Hold"
+                            type="object"
+                            attrs="{'invisible': [('state', '=', 'hold')]}"
+                            groups="MOM.group_mom_manager"/>
+                    <button name="action_mark_completed"
+                            string="Mark Completed"
+                            type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('state', '=', 'completed')]}"
+                            groups="MOM.group_mom_manager"/>
+                    <field name="state" widget="statusbar" statusbar_visible="pending,in_progress,hold,completed" clickable="1"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
