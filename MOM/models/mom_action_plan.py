@@ -1,6 +1,6 @@
 from odoo import models, fields, api, _
 from datetime import datetime, timedelta
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 
 class MomActionPlan(models.Model):
     _name = 'mom.action.plan'
@@ -46,10 +46,20 @@ class MomActionPlan(models.Model):
     extension_reason = fields.Text('Extension Reason', tracking=True)
     
     # Compute methods
+    @api.constrains('deadline')
+    def _check_deadline(self):
+        for record in self:
+            if not record.deadline:
+                raise ValidationError(_("Block Time (Deadline) is required for action items."))
+    
     @api.depends('deadline', 'completion_date', 'state', 'cycle_count')
     def _compute_time_status(self):
         today = fields.Date.today()
         for record in self:
+            if not record.deadline:
+                record.time_status = False
+                continue
+                
             if record.state == 'completed' and record.completion_date:
                 if record.completion_date <= record.deadline:
                     record.time_status = 'lead_time'
@@ -77,6 +87,9 @@ class MomActionPlan(models.Model):
     # Action methods
     def action_extend_deadline(self):
         self.ensure_one()
+        if not self.deadline:
+            raise UserError(_("Cannot extend deadline: No initial deadline set."))
+            
         if not self.env.user.has_group('MOM.group_mom_manager'):
             raise UserError(_("Only MOM managers can extend buffer time."))
             
@@ -90,6 +103,9 @@ class MomActionPlan(models.Model):
 
     def action_extend_cycle(self):
         self.ensure_one()
+        if not self.deadline:
+            raise UserError(_("Cannot extend cycle: No initial deadline set."))
+            
         if self.cycle_count >= 4:
             raise UserError(_("Maximum cycle extensions reached."))
             
