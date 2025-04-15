@@ -9,8 +9,8 @@
                   decoration-danger="time_status == 'lag_time'"
                   decoration-warning="time_status == 'buffer_time'"
                   decoration-info="time_status == 'cycle_time_1'"
-                  decoration-bf-warning="time_status == 'cycle_time_2'"
-                  decoration-bf-danger="time_status == 'cycle_time_3' or time_status == 'cycle_time_4+'">
+                  decoration-primary="time_status == 'cycle_time_2'"
+                  decoration-dark="time_status == 'cycle_time_3' or time_status == 'cycle_time_4+'">
                 <field name="name"/>
                 <field name="meeting_type_id"/>
                 <field name="meeting_date"/>
@@ -18,8 +18,8 @@
                 <field name="department_id"/>
                 <field name="deadline"/>
                 <field name="time_status"/>
-                <field name="state"/>
                 <field name="cycle_count"/>
+                <field name="state"/>
             </tree>
         </field>
     </record>
