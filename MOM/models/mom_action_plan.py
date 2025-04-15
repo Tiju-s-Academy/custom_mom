@@ -179,29 +179,25 @@ class MomActionPlan(models.Model):
             )
 
     def write(self, vals):
-        # Allow responsible person to update certain fields
-        is_responsible = self.responsible_id.user_id == self.env.user
-        is_manager = self.env.user.has_group('MOM.group_mom_manager')
-        
+        # Track state changes in chatter
         if 'state' in vals:
+            old_state = self.state
             new_state = vals['state']
-            # Only managers can complete or hold tasks
-            if new_state in ['completed', 'hold'] and not is_manager:
-                return False
-            # Responsible can toggle between pending and in_progress
-            if not (is_responsible or is_manager):
-                return False
             # Auto-set completion date for completed state
             if new_state == 'completed':
                 vals['completion_date'] = fields.Date.today()
-                
-        # Responsible can update notes and progress-related fields
-        allowed_fields = {'notes', 'state'} if is_responsible else set()
-        has_forbidden_fields = any(f not in allowed_fields for f in vals.keys() 
-                                 if f not in {'state', 'notes', '__last_update'})
-        
-        if has_forbidden_fields and not is_manager:
-            return False
+            
+            result = super().write(vals)
+            
+            # Log the state change in chatter
+            if result:
+                message = _("State changed from '%s' to '%s' by %s") % (
+                    dict(self._fields['state'].selection).get(old_state),
+                    dict(self._fields['state'].selection).get(new_state),
+                    self.env.user.name
+                )
+                self.message_post(body=message, tracking_value_ids=[])
+            return result
             
         return super().write(vals)
 
