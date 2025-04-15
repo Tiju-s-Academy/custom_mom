@@ -60,12 +60,12 @@
                             <field name="responsible_id"/>
                             <field name="department_id" force_save="1" readonly="1"/>
                             <field name="deadline"/>
-                            <field name="completion_date" readonly="1" attrs="{'invisible': [('state', '!=', 'completed')]}"/>
+                            <field name="completion_date" readonly="1" invisible="state != 'completed'"/>
                         </group>
                         <group>
                             <field name="time_status"/>
                             <field name="cycle_count"/>
-                            <field name="extension_reason" attrs="{'invisible': [('extension_reason', '=', False)]}"/>
+                            <field name="extension_reason" invisible="not extension_reason"/>
                             <field name="notes"/>
                         </group>
                     </group>
