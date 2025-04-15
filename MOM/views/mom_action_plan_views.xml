@@ -24,6 +24,58 @@
         </field>
     </record>
 
+    <!-- Kanban View -->
+    <record id="view_mom_action_plan_kanban" model="ir.ui.view">
+        <field name="name">mom.action.plan.kanban</field>
+        <field name="model">mom.action.plan</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="time_status" quick_create="false" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="responsible_id"/>
+                <field name="deadline"/>
+                <field name="time_status"/>
+                <field name="state"/>
+                <field name="cycle_count"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <div class="o_kanban_record_top mb-0">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="name"/>
+                                        </strong>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <strong>Deadline:</strong>
+                                            <field name="deadline"/>
+                                        </div>
+                                        <div class="col-6">
+                                            <field name="responsible_id"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <field name="state" widget="label_selection" options="{'classes': {'draft': 'default', 'pending': 'danger', 'in_progress': 'info', 'hold': 'warning', 'completed': 'success'}}"/>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right" t-if="record.cycle_count.raw_value > 0">
+                                        <span class="badge rounded-pill text-bg-warning">
+                                            Cycle: <field name="cycle_count"/>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
     <!-- Form View -->
     <record id="view_mom_action_plan_form" model="ir.ui.view">
         <field name="name">mom.action.plan.form</field>
@@ -121,7 +173,7 @@
     <record id="action_mom_action_plan" model="ir.actions.act_window">
         <field name="name">Action Plans</field>
         <field name="res_model">mom.action.plan</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">kanban,tree,form</field>
         <field name="context">{'search_default_my_actions': 1}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
