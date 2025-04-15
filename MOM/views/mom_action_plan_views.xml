@@ -83,28 +83,30 @@
         <field name="arch" type="xml">
             <form>
                 <header>
+                    <field name="state" invisible="1"/>
                     <button name="action_set_pending" 
                             string="Set Pending" 
                             type="object"
-                            attrs="{'invisible': [('state', '=', 'pending')]}"
-                            groups="MOM.group_mom_manager"/>
+                            groups="MOM.group_mom_manager"
+                            invisible="state == 'pending'"/>
                     <button name="action_set_in_progress"
                             string="Set In Progress"
                             type="object"
-                            attrs="{'invisible': [('state', '=', 'in_progress')]}"
-                            groups="MOM.group_mom_manager"/>
+                            groups="MOM.group_mom_manager"
+                            invisible="state == 'in_progress'"/>
                     <button name="action_set_hold"
                             string="Put on Hold"
                             type="object"
-                            attrs="{'invisible': [('state', '=', 'hold')]}"
-                            groups="MOM.group_mom_manager"/>
+                            groups="MOM.group_mom_manager"
+                            invisible="state == 'hold'"/>
                     <button name="action_mark_completed"
                             string="Mark Completed"
                             type="object"
                             class="oe_highlight"
-                            attrs="{'invisible': [('state', '=', 'completed')]}"
-                            groups="MOM.group_mom_manager"/>
-                    <field name="state" widget="statusbar" statusbar_visible="pending,in_progress,hold,completed" clickable="1"/>
+                            groups="MOM.group_mom_manager"
+                            invisible="state == 'completed'"/>
+                    <field name="state" widget="statusbar" 
+                           statusbar_visible="pending,in_progress,hold,completed"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
