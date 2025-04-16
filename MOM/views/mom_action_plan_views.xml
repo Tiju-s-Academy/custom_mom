@@ -29,7 +29,7 @@
         <field name="name">mom.action.plan.kanban</field>
         <field name="model">mom.action.plan</field>
         <field name="arch" type="xml">
-            <kanban default_group_by="time_status" quick_create="false" class="o_kanban_small_column">
+            <kanban default_group_by="state" quick_create="false" class="o_kanban_small_column">
                 <field name="name"/>
                 <field name="responsible_id"/>
                 <field name="deadline"/>
@@ -40,6 +40,16 @@
                     <t t-name="kanban-box">
                         <div t-attf-class="oe_kanban_global_click">
                             <div class="oe_kanban_content">
+                                <!-- Time Status Badge -->
+                                <div class="float-end">
+                                    <span t-attf-class="badge #{record.time_status.raw_value == 'lead_time' ? 'text-bg-success' : 
+                                        record.time_status.raw_value == 'lag_time' ? 'text-bg-danger' :
+                                        record.time_status.raw_value == 'buffer_time' ? 'text-bg-warning' :
+                                        record.time_status.raw_value == 'cycle_time_1' ? 'text-bg-primary' :
+                                        record.time_status.raw_value == 'cycle_time_2' ? 'text-bg-info' : 'text-bg-secondary'}">
+                                        <field name="time_status"/>
+                                    </span>
+                                </div>
                                 <div class="o_kanban_record_top mb-0">
                                     <div class="o_kanban_record_headings">
                                         <strong class="o_kanban_record_title">
@@ -58,11 +68,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="o_kanban_record_bottom">
-                                    <div class="oe_kanban_bottom_left">
-                                        <field name="state" widget="label_selection" options="{'classes': {'draft': 'default', 'pending': 'danger', 'in_progress': 'info', 'hold': 'warning', 'completed': 'success'}}"/>
-                                    </div>
-                                    <div class="oe_kanban_bottom_right" t-if="record.cycle_count.raw_value > 0">
+                                <div class="o_kanban_record_bottom" t-if="record.cycle_count.raw_value > 0">
+                                    <div class="oe_kanban_bottom_right">
                                         <span class="badge rounded-pill text-bg-warning">
                                             Cycle: <field name="cycle_count"/>
                                         </span>
