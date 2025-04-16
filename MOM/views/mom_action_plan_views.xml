@@ -63,8 +63,8 @@
                                             <strong>Deadline:</strong>
                                             <field name="deadline"/>
                                         </div>
-                                        <div class="col-6">
-                                            <field name="responsible_id"/>
+                                        <div class="col-6 text-end">
+                                            <field name="responsible_id" widget="many2one_avatar"/>
                                         </div>
                                     </div>
                                 </div>
