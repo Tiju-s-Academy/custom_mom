@@ -50,26 +50,19 @@
                                         <field name="time_status"/>
                                     </span>
                                 </div>
-                                <div class="o_kanban_record_top mb-0">
-                                    <div class="o_kanban_record_headings">
-                                        <strong class="o_kanban_record_title">
-                                            <field name="name"/>
-                                        </strong>
-                                    </div>
-                                </div>
                                 <div class="o_kanban_record_body">
                                     <div class="row">
-                                        <div class="col-6">
+                                        <div class="col-12">
                                             <strong>Deadline:</strong>
                                             <field name="deadline"/>
                                         </div>
-                                        <div class="col-6 text-end">
-                                            <field name="responsible_id" widget="many2one_avatar"/>
-                                        </div>
                                     </div>
                                 </div>
-                                <div class="o_kanban_record_bottom" t-if="record.cycle_count.raw_value > 0">
-                                    <div class="oe_kanban_bottom_right">
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <field name="responsible_id" widget="many2one_avatar_user"/>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right" t-if="record.cycle_count.raw_value > 0">
                                         <span class="badge rounded-pill text-bg-warning">
                                             Cycle: <field name="cycle_count"/>
                                         </span>
