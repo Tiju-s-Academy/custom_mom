@@ -140,3 +140,26 @@ class MomActionPlan(models.Model):
                 if record.mom_id.prepared_by_id.user_id != self.env.user:
                     return False
         return super().unlink()
+
+    @api.depends('mom_id.prepared_by_id', 'responsible_id')
+    def _compute_can_manage_action_items(self):
+        for record in self:
+            record.can_manage_action_items = (
+                record.mom_id.prepared_by_id.user_id == self.env.user or
+                record.responsible_id.user_id == self.env.user or 
+                self.env.user.has_group('MOM.group_mom_manager')
+            )
+
+    @api.depends('responsible_id', 'mom_id.prepared_by_id') 
+    def _compute_can_edit_state(self):
+        for record in self:
+            record.can_edit_state = (
+                record.responsible_id.user_id == self.env.user or
+                record.mom_id.prepared_by_id.user_id == self.env.user or
+                self.env.user.has_group('MOM.group_mom_manager')
+            )
+
+    @api.depends('responsible_id.department_id')
+    def _compute_department(self):
+        for record in self:
+            record.department_id = record.responsible_id.department_id
