@@ -50,6 +50,13 @@
                                         <field name="time_status"/>
                                     </span>
                                 </div>
+                                <div class="o_kanban_record_top mb-0">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="name"/>
+                                        </strong>
+                                    </div>
+                                </div>
                                 <div class="o_kanban_record_body">
                                     <div class="row">
                                         <div class="col-12">
