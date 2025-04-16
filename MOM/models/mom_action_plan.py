@@ -56,15 +56,34 @@ class MomActionPlan(models.Model):
     
     cycle_count = fields.Integer('Cycle Extensions', default=0, tracking=True)
     extension_reason = fields.Text('Extension Reason', tracking=True)
+
+    # Add recurring fields
+    is_recurring = fields.Boolean('Recurring Task', default=False, tracking=True)
+    recurrence_days = fields.Integer('Recur Every (Days)', default=1, tracking=True)
+    next_deadline = fields.Date('Next Deadline', compute='_compute_next_deadline', store=True)
     
-    # Compute methods
-    @api.constrains('deadline')
-    def _check_deadline(self):
+    @api.depends('deadline', 'is_recurring', 'recurrence_days', 'state')
+    def _compute_next_deadline(self):
         for record in self:
-            if not record.deadline:
-                raise ValidationError(_("Block Time (Deadline) is required for action items."))
-    
-    @api.depends('deadline', 'completion_date', 'state', 'cycle_count')
+            if record.is_recurring and record.deadline and record.state != 'completed':
+                today = fields.Date.today()
+                if today > record.deadline:
+                    days_since = (today - record.deadline).days
+                    days_to_add = ((days_since // record.recurrence_days) + 1) * record.recurrence_days
+                    record.next_deadline = record.deadline + timedelta(days=days_to_add)
+                else:
+                    record.next_deadline = record.deadline
+            else:
+                record.next_deadline = record.deadline
+
+    @api.constrains('recurrence_days')
+    def _check_recurrence_days(self):
+        for record in self:
+            if record.is_recurring and record.recurrence_days < 1:
+                raise ValidationError(_("Recurrence days must be at least 1"))
+
+    # Override the time status computation for recurring tasks
+    @api.depends('deadline', 'completion_date', 'state', 'cycle_count', 'is_recurring', 'next_deadline')
     def _compute_time_status(self):
         today = fields.Date.today()
         for record in self:
@@ -72,20 +91,22 @@ class MomActionPlan(models.Model):
                 record.time_status = False
                 continue
                 
+            check_date = record.next_deadline if record.is_recurring else record.deadline
+            
             if record.state == 'completed' and record.completion_date:
-                if record.completion_date <= record.deadline:
+                if record.completion_date <= check_date:
                     record.time_status = 'lead_time'
                 else:
-                    days_late = (record.completion_date - record.deadline).days
+                    days_late = (record.completion_date - check_date).days
                     record.time_status = record._get_time_status(days_late)
             elif record.state != 'completed':
-                if today <= record.deadline:
+                if today <= check_date:
                     record.time_status = 'lead_time'
                 elif not self.env.user.has_group('MOM.group_mom_manager'):
                     # Only auto-move to lag time for non-managers
                     record.time_status = 'lag_time'
                 else:
-                    days_late = (today - record.deadline).days
+                    days_late = (today - check_date).days
                     record.time_status = record._get_time_status(days_late)
 
     def _get_time_status(self, days_late):
