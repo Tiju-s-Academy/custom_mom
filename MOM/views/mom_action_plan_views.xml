@@ -69,10 +69,16 @@
                                     <div class="oe_kanban_bottom_left">
                                         <field name="responsible_id" widget="many2one_avatar_user"/>
                                     </div>
-                                    <div class="oe_kanban_bottom_right" t-if="record.cycle_count.raw_value > 0">
-                                        <span class="badge rounded-pill text-bg-warning">
-                                            Cycle: <field name="cycle_count"/>
-                                        </span>
+                                    <div class="oe_kanban_bottom_right d-flex align-items-center">
+                                        <div class="me-2" t-if="record.cycle_count.raw_value > 0">
+                                            <span class="badge rounded-pill text-bg-warning">
+                                                Cycle: <field name="cycle_count"/>
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <i class="fa fa-clock-o me-1" title="Deadline"/>
+                                            <field name="deadline"/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
