@@ -6,6 +6,7 @@ class MomActionPlan(models.Model):
     _name = 'mom.action.plan'
     _description = 'Action Plan'
     _inherit = ['mail.thread', 'mail.activity.mixin']
+    _order = 'create_date desc'  # Add this line for default ordering
 
     # Update all fields to enable tracking
     name = fields.Char('Action Item', required=True, tracking=True)
