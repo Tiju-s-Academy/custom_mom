@@ -99,8 +99,9 @@
                     </div>
                     <group>
                         <group>
-                            <field name="meeting_type_id" readonly="1"/>
-                            <field name="meeting_date" readonly="1"/>
+                            <field name="mom_id" groups="MOM.group_mom_manager" options="{'no_quick_create': True}"/>
+                            <field name="meeting_type_id"/>
+                            <field name="meeting_date"/>
                             <field name="responsible_id"/>
                             <field name="department_id" force_save="1" readonly="1"/>
                             <field name="deadline"/>
@@ -170,6 +171,25 @@
         <field name="domain">[]</field>
         <field name="groups_id" eval="[(4, ref('MOM.group_mom_user')), (4, ref('MOM.group_mom_manager'))]"/>
     </record>
+
+    <!-- Action For Managers (without MOM required) -->
+    <record id="action_mom_action_plan_manager" model="ir.actions.act_window">
+        <field name="name">Create Action Plan</field>
+        <field name="res_model">mom.action.plan</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_mom_action_plan_form"/>
+        <field name="target">new</field>
+        <field name="context">{'default_meeting_date': context_today()}</field>
+        <field name="groups_id" eval="[(4, ref('MOM.group_mom_manager'))]"/>
+    </record>
+
+    <!-- Special Menu Item for Managers to Create Actions Without MOM -->
+    <menuitem id="menu_mom_standalone_action_plan"
+              name="Create Action Plan"
+              parent="menu_mom_action_plans"
+              action="action_mom_action_plan_manager"
+              sequence="5"
+              groups="MOM.group_mom_manager"/>
 
     <!-- Removed menuitem as it's now in menu_views.xml -->
 </odoo>

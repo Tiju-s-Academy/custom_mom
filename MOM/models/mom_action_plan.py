@@ -10,9 +10,23 @@ class MomActionPlan(models.Model):
 
     # Update all fields to enable tracking
     name = fields.Char('Action Item', required=True, tracking=True)
-    mom_id = fields.Many2one('mom.meeting', string='Meeting', required=True, ondelete='cascade', tracking=True)
-    meeting_type_id = fields.Many2one(related='mom_id.meeting_type_id', string='Meeting Type', store=True, readonly=True, tracking=True)
-    meeting_date = fields.Date(related='mom_id.meeting_date', string='Meeting Date', store=True, readonly=True, tracking=True)
+    mom_id = fields.Many2one('mom.meeting', string='Meeting', required=False, ondelete='cascade', tracking=True)
+    meeting_type_id = fields.Many2one(
+        'mom.meeting.type', 
+        string='Meeting Type', 
+        store=True, 
+        readonly=False,
+        tracking=True,
+        related='mom_id.meeting_type_id',
+        compute='_compute_meeting_data',
+        inverse='_inverse_meeting_type')
+    meeting_date = fields.Date(
+        related='mom_id.meeting_date', 
+        string='Meeting Date', 
+        store=True, 
+        readonly=False,
+        compute='_compute_meeting_data',
+        tracking=True)
     responsible_id = fields.Many2one('hr.employee', string='Responsible Person', required=True, tracking=True)
     notes = fields.Text('Notes', tracking=True)
     department_id = fields.Many2one(
@@ -149,8 +163,11 @@ class MomActionPlan(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        if not self.env.user.has_group('MOM.group_mom_manager'):
-            for vals in vals_list:
+        for vals in vals_list:
+            # Only require mom_id for non-managers
+            if not self.env.user.has_group('MOM.group_mom_manager') and not vals.get('mom_id'):
+                return False
+            elif vals.get('mom_id') and not self.env.user.has_group('MOM.group_mom_manager'):
                 mom = self.env['mom.meeting'].browse(vals.get('mom_id'))
                 if mom.prepared_by_id.user_id != self.env.user:
                     return False
@@ -185,3 +202,19 @@ class MomActionPlan(models.Model):
     def _compute_department(self):
         for record in self:
             record.department_id = record.responsible_id.department_id
+
+    @api.depends('mom_id')
+    def _compute_meeting_data(self):
+        for record in self:
+            if record.mom_id:
+                record.meeting_type_id = record.mom_id.meeting_type_id
+                record.meeting_date = record.mom_id.meeting_date
+            elif not record.meeting_type_id:
+                # Set default meeting type
+                meeting_type = self.env['mom.meeting.type'].search([], limit=1)
+                if meeting_type:
+                    record.meeting_type_id = meeting_type.id
+    
+    def _inverse_meeting_type(self):
+        # This method is required for the inverse field to work properly
+        pass
