@@ -68,6 +68,14 @@
               action="action_mom_action_plan"
               sequence="20"
               groups="group_mom_user,group_mom_manager,group_mom_attendee"/>
+              
+    <!-- Quick Create Action Plan Menu (Manager Only) -->
+    <menuitem id="menu_mom_standalone_action_plan"
+              name="Quick Create Action Plan"
+              parent="menu_mom_root"
+              action="action_mom_action_plan_manager"
+              sequence="25"
+              groups="group_mom_manager"/>
 
     <!-- Configuration Menu -->
     <menuitem id="menu_mom_config"

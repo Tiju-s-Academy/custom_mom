@@ -182,14 +182,4 @@
         <field name="context">{'default_meeting_date': context_today()}</field>
         <field name="groups_id" eval="[(4, ref('MOM.group_mom_manager'))]"/>
     </record>
-
-    <!-- Special Menu Item for Managers to Create Actions Without MOM -->
-    <menuitem id="menu_mom_standalone_action_plan"
-              name="Create Action Plan"
-              parent="menu_mom_action_plans"
-              action="action_mom_action_plan_manager"
-              sequence="5"
-              groups="MOM.group_mom_manager"/>
-
-    <!-- Removed menuitem as it's now in menu_views.xml -->
 </odoo>
