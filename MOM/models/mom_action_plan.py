@@ -77,6 +77,20 @@ class MomActionPlan(models.Model):
     recurrence_days = fields.Integer('Recur Every (Days)', default=1, tracking=True)
     next_deadline = fields.Date('Next Deadline', compute='_compute_next_deadline', store=True)
     
+    # New countdown field
+    days_to_deadline = fields.Integer(
+        string='Days Left', 
+        compute='_compute_days_to_deadline',
+        store=True,
+    )
+    
+    countdown_status = fields.Selection([
+        ('green', 'Green'),
+        ('yellow', 'Yellow'),
+        ('orange', 'Orange'),
+        ('red', 'Red'),
+    ], string='Countdown Status', compute='_compute_days_to_deadline', store=True)
+
     @api.depends('deadline', 'is_recurring', 'recurrence_days', 'state')
     def _compute_next_deadline(self):
         for record in self:
@@ -218,3 +232,25 @@ class MomActionPlan(models.Model):
     def _inverse_meeting_type(self):
         # This method is required for the inverse field to work properly
         pass
+
+    @api.depends('deadline')
+    def _compute_days_to_deadline(self):
+        today = fields.Date.today()
+        for record in self:
+            if not record.deadline:
+                record.days_to_deadline = 0
+                record.countdown_status = 'green'
+                continue
+
+            days = (record.deadline - today).days
+            record.days_to_deadline = days
+            
+            # Set countdown status based on days left
+            if days <= 0:
+                record.countdown_status = 'red'
+            elif days <= 3:
+                record.countdown_status = 'orange'
+            elif days <= 7:
+                record.countdown_status = 'yellow'
+            else:
+                record.countdown_status = 'green'

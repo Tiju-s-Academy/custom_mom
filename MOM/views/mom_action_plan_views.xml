@@ -36,6 +36,8 @@
                 <field name="time_status"/>
                 <field name="state"/>
                 <field name="cycle_count"/>
+                <field name="days_to_deadline"/>
+                <field name="countdown_status"/>
                 <templates>
                     <t t-name="kanban-box">
                         <div t-attf-class="oe_kanban_global_click">
@@ -57,7 +59,25 @@
                                         </strong>
                                     </div>
                                 </div>
-                                <div class="o_kanban_record_body"/>
+                                <div class="o_kanban_record_body">
+                                    <div t-if="record.days_to_deadline.raw_value !== undefined" 
+                                         t-attf-class="deadline-countdown mt-2 mb-2 text-center fw-bold rounded py-1 #{
+                                            record.countdown_status.raw_value === 'green' ? 'bg-success-light text-success' : 
+                                            record.countdown_status.raw_value === 'yellow' ? 'bg-warning-light text-warning' : 
+                                            record.countdown_status.raw_value === 'orange' ? 'bg-orange-light text-orange' : 
+                                            'bg-danger-light text-danger'
+                                         }">
+                                        <t t-if="record.days_to_deadline.raw_value > 0">
+                                            <i class="fa fa-clock-o me-1"/> <t t-esc="record.days_to_deadline.raw_value"/> days left
+                                        </t>
+                                        <t t-elif="record.days_to_deadline.raw_value == 0">
+                                            <i class="fa fa-exclamation-triangle me-1"/> Due today!
+                                        </t>
+                                        <t t-else="">
+                                            <i class="fa fa-times-circle me-1"/> Overdue by <t t-esc="-record.days_to_deadline.raw_value"/> days
+                                        </t>
+                                    </div>
+                                </div>
                                 <div class="o_kanban_record_bottom">
                                     <div class="oe_kanban_bottom_left">
                                         <field name="responsible_id" widget="many2one_avatar_user"/>
