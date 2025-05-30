@@ -73,9 +73,9 @@
     <menuitem id="menu_mom_standalone_action_plan"
               name="Quick Create Action Plan"
               parent="menu_mom_root"
-              action="action_mom_action_plan_manager"
+              action="MOM.action_mom_action_plan_manager"
               sequence="25"
-              groups="group_mom_manager"/>
+              groups="MOM.group_mom_manager"/>
 
     <!-- Configuration Menu -->
     <menuitem id="menu_mom_config"
