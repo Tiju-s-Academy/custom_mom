@@ -97,14 +97,20 @@
     color: white !important;
 }
 
-/* Add hover effect to action countdown badges */
+/* Make all badge text white for better readability */
 .o_kanban_record span.badge.bg-success,
 .o_kanban_record span.badge.bg-warning,
 .o_kanban_record span.badge.bg-orange,
 .o_kanban_record span.badge.bg-danger {
+    color: white !important;
     transition: all 0.3s ease;
 }
 
+.o_kanban_record span.badge.bg-warning {
+    color: #212529 !important; /* Darker text for yellow badges */
+}
+
+/* Add hover effect to action countdown badges */
 .o_kanban_record span.badge.bg-success:hover,
 .o_kanban_record span.badge.bg-warning:hover,
 .o_kanban_record span.badge.bg-orange:hover,
