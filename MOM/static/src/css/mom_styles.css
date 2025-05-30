@@ -90,3 +90,24 @@
     border-radius: 4px !important;
     transition: all 0.3s ease;
 }
+
+/* Custom badge colors for countdown */
+.badge.bg-orange {
+    background-color: #fd7e14 !important;
+    color: white !important;
+}
+
+/* Add hover effect to action countdown badges */
+.o_kanban_record span.badge.bg-success,
+.o_kanban_record span.badge.bg-warning,
+.o_kanban_record span.badge.bg-orange,
+.o_kanban_record span.badge.bg-danger {
+    transition: all 0.3s ease;
+}
+
+.o_kanban_record span.badge.bg-success:hover,
+.o_kanban_record span.badge.bg-warning:hover,
+.o_kanban_record span.badge.bg-orange:hover,
+.o_kanban_record span.badge.bg-danger:hover {
+    transform: scale(1.05);
+}
