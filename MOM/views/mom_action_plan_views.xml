@@ -185,7 +185,6 @@
         <field name="view_mode">kanban,tree,form</field>
         <field name="context">{
             'search_default_my_actions': 1,
-            'search_default_not_completed': 1,
             'search_default_group_by_state': 1
         }</field>
         <field name="help" type="html">
