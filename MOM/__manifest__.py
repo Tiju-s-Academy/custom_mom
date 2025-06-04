@@ -21,6 +21,7 @@
         'security/ir.model.access.csv',
         'data/ir.sequence.data.xml',  # Add sequence data
         'data/mail_activity_data.xml',  # Add activity types
+        'data/ir_cron_data.xml',  # Add cron data
         'data/mom_stages.xml',
         'views/mom_views.xml',
         'views/mom_action_plan_views.xml',
