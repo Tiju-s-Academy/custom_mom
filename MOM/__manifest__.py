@@ -22,6 +22,7 @@
         'data/ir.sequence.data.xml',  # Add sequence data
         'data/mail_activity_data.xml',  # Add activity types
         'data/mom_stages.xml',
+        'data/ir_cron_data.xml',      # Cron job for countdown updates
         'views/mom_views.xml',
         'views/mom_action_plan_views.xml',
         'views/mom_stage_views.xml',  # Add this line

@@ -1,6 +1,9 @@
 from odoo import models, fields, api, _
 from datetime import datetime, timedelta
 from odoo.exceptions import UserError, ValidationError
+import logging
+
+_logger = logging.getLogger(__name__)
 
 class MomActionPlan(models.Model):
     _name = 'mom.action.plan'
@@ -90,6 +93,9 @@ class MomActionPlan(models.Model):
         ('orange', 'Orange'),
         ('red', 'Red'),
     ], string='Countdown Status', compute='_compute_days_to_deadline', store=True)
+    
+    # Field to force recomputation on update
+    last_countdown_update = fields.Date(string='Last Countdown Update')
 
     @api.depends('deadline', 'is_recurring', 'recurrence_days', 'state')
     def _compute_next_deadline(self):
@@ -233,7 +239,7 @@ class MomActionPlan(models.Model):
         # This method is required for the inverse field to work properly
         pass
 
-    @api.depends('deadline')
+    @api.depends('deadline', 'last_countdown_update')
     def _compute_days_to_deadline(self):
         today = fields.Date.today()
         for record in self:
@@ -254,3 +260,37 @@ class MomActionPlan(models.Model):
                 record.countdown_status = 'yellow'
             else:
                 record.countdown_status = 'green'
+
+    @api.model
+    def _update_all_countdowns(self):
+        """
+        Update all countdown values daily
+        This method is called by a scheduled action (cron job)
+        """
+        # Get all active action plans that haven't been completed
+        action_plans = self.search([('state', '!=', 'completed')])
+        
+        # Update the last_countdown_update to force recomputation
+        action_plans.write({'last_countdown_update': fields.Date.today()})
+        
+        # Log the update
+        _logger.info(f"Updated countdown values for {len(action_plans)} action plans.")
+        return True
+        
+    @api.model
+    def _get_days_to_deadline(self):
+        """
+        Method to get days to deadline for use in views
+        This allows dynamic calculation without waiting for the stored compute field to update
+        """
+        today = fields.Date.today()
+        if not self.deadline:
+            return 0
+        return (self.deadline - today).days
+
+    def action_refresh_countdown(self):
+        """
+        Refresh the countdown manually from the UI
+        """
+        self.write({'last_countdown_update': fields.Date.today()})
+        return True
