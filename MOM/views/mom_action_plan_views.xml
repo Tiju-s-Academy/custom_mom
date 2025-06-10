@@ -116,7 +116,7 @@
                             string="Refresh Countdown" 
                             type="object" 
                             class="oe_highlight"
-                            attrs="{'invisible': [('state', '=', 'completed')]}"/>
+                            invisible="state == 'completed'"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
